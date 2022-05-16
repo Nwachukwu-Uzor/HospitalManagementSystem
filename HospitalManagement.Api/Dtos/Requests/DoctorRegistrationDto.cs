@@ -9,30 +9,30 @@ namespace HospitalManagement.Api.Dtos.Requests
     public class DoctorRegistrationDto
     {
         [Required]
-        [StringLength(4)]
+        [MinLength(4)]
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
 
         [Required]
-        [StringLength(4)]
+        [MinLength(4)]
         public string LastName { get; set; }
 
         [Required]
-        [StringLength(7)]
+        [MinLength(7)]
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(10)]
+        [MinLength(8)]
         public string PhoneNumber { get; set; }
         
         [Required]
-        [StringLength(4)]
+        [MinLength(4)]
         public string Sex { get; set; }
 
         [Required]
-        [StringLength(10)]
+        [MinLength(10)]
         public string Address { get; set; }
     }
 }

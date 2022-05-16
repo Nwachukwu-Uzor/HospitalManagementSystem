@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HospitalManagement.Api.Dtos.Responses
 {
@@ -14,6 +11,7 @@ namespace HospitalManagement.Api.Dtos.Responses
         public string PhoneNumber { get; set; }
         public string Sex { get; set; }
         public string Address { get; set; }
+        public string IdentificationNumber { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

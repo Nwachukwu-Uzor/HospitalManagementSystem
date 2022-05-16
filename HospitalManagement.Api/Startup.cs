@@ -1,7 +1,13 @@
+using HospitalManagement.Data;
+using HospitalManagement.Data.Contracts;
+using HospitalManagement.Data.Repositories;
+using HospitalManagement.Services;
+using HospitalManagement.Services.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,6 +40,13 @@ namespace HospitalManagement.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HospitalManagement.Api", Version = "v1" });
             });
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("SqlServer"));
+            });
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDoctorsRepository, DoctorsRepository>();
+            services.AddScoped<IIdentityNumberGenerator, IdentityNumberGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

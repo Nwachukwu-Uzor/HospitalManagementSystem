@@ -13,8 +13,10 @@ namespace HospitalManagement.Data.Repositories
     public class DoctorsRepository : GenericRepository<Doctor>, IDoctorsRepository
     {
         private readonly IIdentityNumberGenerator _identityNumberGenerator;
-        public DoctorsRepository(AppDbContext context) : base(context)
-        { }
+        public DoctorsRepository(AppDbContext context, IIdentityNumberGenerator identityNumberGenerator) : base(context)
+        {
+            _identityNumberGenerator = identityNumberGenerator;
+        }
 
         public override async Task<Doctor> AddAsync(Doctor entity)
         {

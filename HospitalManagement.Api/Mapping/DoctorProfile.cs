@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HospitalManagement.Api.Dtos.Requests;
+using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,8 @@ namespace HospitalManagement.Api.Mapping
     {
         public DoctorProfile()
         {
-            CreateMap<Doctor, DoctorRegistrationDto>();
-            CreateMap<Doctor, DoctorRegistrationDto>();
+            CreateMap<DoctorRegistrationDto, Doctor>();
+            CreateMap<Doctor, DoctorRequestResponse>();
         }
     }
 }

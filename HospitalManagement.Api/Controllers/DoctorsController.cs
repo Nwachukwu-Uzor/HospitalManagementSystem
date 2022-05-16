@@ -2,8 +2,10 @@
 using HospitalManagement.Api.Dtos.Requests;
 using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Api.Response;
+using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,10 +19,12 @@ namespace HospitalManagement.Api.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IAccountService _accountService;
+        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _accountService = accountService;
         }
 
         [HttpGet]
@@ -49,7 +53,10 @@ namespace HospitalManagement.Api.Controllers
             }
             try
             {
+                var doctorAccountEntity = _mapper.Map<IdentityUser>(registrationDto);
+                var doctorAccountCreated = await _accountService.CreateUserAccountAsync(doctorAccountEntity, registrationDto.Password);
                 var userEntity = _mapper.Map<Doctor>(registrationDto);
+                userEntity.IdentityId = Guid.Parse(doctorAccountCreated.Id);
                 var entityCreated = await _unitOfWork.Doctors.AddAsync(userEntity);
                 if (entityCreated == null)
                 {

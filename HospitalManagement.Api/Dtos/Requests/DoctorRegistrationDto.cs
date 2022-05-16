@@ -23,6 +23,8 @@ namespace HospitalManagement.Api.Dtos.Requests
         [EmailAddress]
         public string Email { get; set; }
 
+        public string Password { get; set; }
+
         [Required]
         [MinLength(8)]
         public string PhoneNumber { get; set; }

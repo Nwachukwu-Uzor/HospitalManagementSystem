@@ -4,6 +4,7 @@ namespace HospitalManagement.Api.Dtos.Responses
 {
     public class DoctorRequestResponse
     {
+        public Guid IdentityId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }

@@ -6,6 +6,7 @@ using HospitalManagement.Services.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,7 +45,12 @@ namespace HospitalManagement.Api
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SqlServer"));
             });
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<AppDbContext>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IDoctorsRepository, DoctorsRepository>();
             services.AddScoped<IIdentityNumberGenerator, IdentityNumberGenerator>();
         }

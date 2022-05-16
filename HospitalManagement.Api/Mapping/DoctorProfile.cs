@@ -2,10 +2,7 @@
 using HospitalManagement.Api.Dtos.Requests;
 using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace HospitalManagement.Api.Mapping
 {
@@ -15,6 +12,9 @@ namespace HospitalManagement.Api.Mapping
         {
             CreateMap<DoctorRegistrationDto, Doctor>();
             CreateMap<Doctor, DoctorRequestResponse>();
+            CreateMap<DoctorRegistrationDto, IdentityUser>()
+                .ForMember(dest => dest.EmailConfirmed, option => option.MapFrom(src => true))
+                .ForMember(dest => dest.UserName, option => option.MapFrom(src => src.Email));
         }
     }
 }

@@ -33,7 +33,7 @@ namespace HospitalManagement.Data.Repositories
                 return false;
             }
 
-            _dbSet.Remove(entity);
+            entity.Status = 0;
 
             return await _context.SaveChangesAsync() > 0;
         }

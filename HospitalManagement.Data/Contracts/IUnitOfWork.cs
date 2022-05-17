@@ -9,5 +9,6 @@ namespace HospitalManagement.Data.Contracts
     public interface IUnitOfWork
     {
         public IDoctorsRepository Doctors { get; }
+        public IPatientsRepository Patients { get; }
     }
 }

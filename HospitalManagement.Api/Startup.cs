@@ -3,6 +3,7 @@ using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Repositories;
 using HospitalManagement.Services;
 using HospitalManagement.Services.Contracts;
+using HospitalManagement.Services.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -53,6 +54,12 @@ namespace HospitalManagement.Api
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IDoctorsRepository, DoctorsRepository>();
             services.AddScoped<IIdentityNumberGenerator, IdentityNumberGenerator>();
+
+            // calling in SendGrid Configurations
+            services.Configure<SendGridApi>(Configuration.GetSection("SendGrid"));
+
+            // add service for email notification
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

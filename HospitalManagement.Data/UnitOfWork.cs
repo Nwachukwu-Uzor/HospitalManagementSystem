@@ -6,9 +6,12 @@ namespace HospitalManagement.Data
     {
         public IDoctorsRepository Doctors { get; }
 
-        public UnitOfWork(IDoctorsRepository doctors)
+        public IPatientsRepository Patients { get; }
+
+        public UnitOfWork(IDoctorsRepository doctors, IPatientsRepository patients)
         {
             Doctors = doctors;
+            Patients = patients;
         }
     }
 }

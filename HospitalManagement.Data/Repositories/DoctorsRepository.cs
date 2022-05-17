@@ -33,7 +33,6 @@ namespace HospitalManagement.Data.Repositories
 
             return await base.AddAsync(entity);
         }
-        
 
         public Task<IEnumerable<Appointment>> GetAppointmentsForDoctorAsync(Guid doctorId, int pageSize, int page)
         {

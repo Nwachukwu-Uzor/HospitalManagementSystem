@@ -5,6 +5,8 @@ using HospitalManagement.Api.Response;
 using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
+using HospitalManagement.Services.Contracts;
+using HospitalManagement.Services.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,18 +15,12 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DoctorsController : ControllerBase
+    public class DoctorsController : BaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IAccountService _accountService;
-        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService)
+        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService)
+        : base(unitOfWork, mapper, accountService, emailService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _accountService = accountService;
+            
         }
 
         [HttpGet]
@@ -33,10 +29,10 @@ namespace HospitalManagement.Api.Controllers
             try
             {
                 var doctors = await _unitOfWork.Doctors.GetAllPaginatedAsync(pageNumber, pageSize);
-                return Ok(new ApiResponse<IEnumerable<DoctorRequestResponse>> { 
+                return Ok(new ApiResponse<IEnumerable<DoctorRequestDto>> { 
                     Success = true,
                     Errors = null,
-                    Data = _mapper.Map<IEnumerable<DoctorRequestResponse>>(doctors)
+                    Data = _mapper.Map<IEnumerable<DoctorRequestDto>>(doctors)
                 });
             } catch(Exception ex)
             {
@@ -63,10 +59,26 @@ namespace HospitalManagement.Api.Controllers
                     return BadRequest("Invalid entity");
                 }
 
-                return Ok(new ApiResponse<DoctorRequestResponse> { 
+                var emailToSend = new Email
+                {
+                    Body = $"<h1>YOU HAVE BEEN SUCCESSFULLY REGISTERED AS A DOCTOR</h1>" +
+                    $"<p>Your identification number is {userEntity.IdentificationNumber}</p>",
+                    ToEmail = userEntity.Email,
+                    ToName = $"{userEntity.FirstName} {userEntity.LastName}",
+                    Subject = "Account Created"
+                };
+
+                var isEmailSent = await _emailService.SendMail(emailToSend);
+
+                if (!isEmailSent)
+                {
+                    return BadRequest("Unable to send email");
+                }
+
+                return Ok(new ApiResponse<DoctorRequestDto> { 
                     Success = true,
                     Errors = null,
-                    Data = _mapper.Map<DoctorRequestResponse>(entityCreated)
+                    Data = _mapper.Map<DoctorRequestDto>(entityCreated)
                 });
             }
             catch (Exception ex)

@@ -11,7 +11,7 @@ namespace HospitalManagement.Api.Mapping
         public DoctorProfile()
         {
             CreateMap<DoctorRegistrationDto, Doctor>();
-            CreateMap<Doctor, DoctorRequestResponse>();
+            CreateMap<Doctor, DoctorRequestDto>();
             CreateMap<DoctorRegistrationDto, IdentityUser>()
                 .ForMember(dest => dest.EmailConfirmed, option => option.MapFrom(src => true))
                 .ForMember(dest => dest.UserName, option => option.MapFrom(src => src.Email));

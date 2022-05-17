@@ -46,7 +46,14 @@ namespace HospitalManagement.Data.Repositories
 
         public async Task<Doctor> GetDoctorByIdentityNumber(string identityNumber)
         {
-            return await _dbSet.Where(doctor => doctor.IdentificationNumber == identityNumber).FirstOrDefaultAsync();
+           var doctor = await _dbSet.Where(doctor => doctor.IdentificationNumber == identityNumber).FirstOrDefaultAsync();
+
+            if (doctor == null)
+            {
+                throw new ArgumentException("No doctor with the identity number provided");
+            }
+
+            return doctor;
         }
     }
 }

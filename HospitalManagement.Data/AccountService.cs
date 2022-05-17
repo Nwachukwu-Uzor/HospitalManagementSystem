@@ -20,7 +20,7 @@ namespace HospitalManagement.Data
 
             if (userExist != null)
             {
-                throw new ArgumentException($"A user already exists with this email address {user.Email}");
+                return userExist;
             }
 
             var isCreated = await _userManager.CreateAsync(user, password);

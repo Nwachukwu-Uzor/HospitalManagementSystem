@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement.Api.Dtos.Requests
 {
-    public class PatientRegistrationRequest
+    public class PatientRegistrationDto
     {
         [Required]
         [MinLength(4)]

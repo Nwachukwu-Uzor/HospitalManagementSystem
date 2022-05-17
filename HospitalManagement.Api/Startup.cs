@@ -50,9 +50,14 @@ namespace HospitalManagement.Api
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppDbContext>();
 
+
+            // Data access services
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IDoctorsRepository, DoctorsRepository>();
+            services.AddScoped<IPatientsRepository, PatientsRepository>();
+
+            services.AddScoped<IAccountService, AccountService>();
+            
             services.AddScoped<IIdentityNumberGenerator, IdentityNumberGenerator>();
 
             // calling in SendGrid Configurations

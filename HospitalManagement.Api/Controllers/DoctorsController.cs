@@ -23,23 +23,6 @@ namespace HospitalManagement.Api.Controllers
             
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllDoctorsAsync(int pageNumber = 1, int pageSize = 50)
-        {
-            try
-            {
-                var doctors = await _unitOfWork.Doctors.GetAllPaginatedAsync(pageNumber, pageSize);
-                return Ok(new ApiResponse<IEnumerable<DoctorRequestDto>> { 
-                    Success = true,
-                    Errors = null,
-                    Data = _mapper.Map<IEnumerable<DoctorRequestDto>>(doctors)
-                });
-            } catch(Exception ex)
-            {
-                return BadRequest($"Unable to get doctors {ex.Message}");
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> CreateDoctorAsync(DoctorRegistrationDto registrationDto)
         {
@@ -75,15 +58,52 @@ namespace HospitalManagement.Api.Controllers
                     return BadRequest("Unable to send email");
                 }
 
-                return Ok(new ApiResponse<DoctorRequestDto> { 
-                    Success = true,
-                    Errors = null,
-                    Data = _mapper.Map<DoctorRequestDto>(entityCreated)
-                });
+                return CreatedAtAction(
+                    nameof(GetDoctorByIdentityNumberAsync), 
+                    new { entityCreated.IdentificationNumber }, 
+                    new ApiResponse<DoctorRequestDto> { 
+                        Success = true,
+                        Errors = null,
+                        Data = _mapper.Map<DoctorRequestDto>(entityCreated)
+                    }
+                );
             }
             catch (Exception ex)
             {
                 return BadRequest($"Something wrong {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllDoctorsAsync(int pageNumber = 1, int pageSize = 50)
+        {
+            try
+            {
+                var doctors = await _unitOfWork.Doctors.GetAllPaginatedAsync(pageNumber, pageSize);
+                return Ok(new ApiResponse<IEnumerable<DoctorRequestDto>>
+                {
+                    Success = true,
+                    Errors = null,
+                    Data = _mapper.Map<IEnumerable<DoctorRequestDto>>(doctors)
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Unable to get doctors {ex.Message}");
+            }
+        }
+
+        [HttpGet("{doctorIdentityNumber}")]
+        public async Task<IActionResult> GetDoctorByIdentityNumberAsync(string doctorIdentityNumber)
+        {
+            try
+            {
+                var doctor = await _unitOfWork.Doctors.GetDoctorByIdentityNumber(doctorIdentityNumber);
+
+                return Ok(_mapper.Map<DoctorRequestDto>(doctor));
+            } catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
             }
         }
     }

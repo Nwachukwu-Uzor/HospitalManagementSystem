@@ -60,7 +60,7 @@ namespace HospitalManagement.Api.Controllers
 
                 return CreatedAtAction(
                     nameof(GetDoctorByIdentityNumberAsync), 
-                    new { entityCreated.IdentificationNumber }, 
+                    new { doctorIdentityNumber = entityCreated.IdentificationNumber }, 
                     new ApiResponse<DoctorRequestDto> { 
                         Success = true,
                         Errors = null,

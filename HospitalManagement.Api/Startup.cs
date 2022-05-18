@@ -63,6 +63,9 @@ namespace HospitalManagement.Api
             // calling in SendGrid Configurations
             services.Configure<SendGridApi>(Configuration.GetSection("SendGrid"));
 
+            // var sendGridApi = Configuration.GetSection("SendGrid").Get<SendGridApi>();
+            
+
             // add service for email notification
             services.AddScoped<IEmailService, EmailService>();
         }

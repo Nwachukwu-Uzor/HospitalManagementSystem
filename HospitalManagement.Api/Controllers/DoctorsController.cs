@@ -39,7 +39,7 @@ namespace HospitalManagement.Api.Controllers
                 var entityCreated = await _unitOfWork.Doctors.AddAsync(userEntity);
                 if (entityCreated == null)
                 {
-                    return BadRequest("Invalid entity");
+                    return BadRequest("Unable to create doctor account with the data provided");
                 }
 
                 var emailToSend = new Email
@@ -58,14 +58,10 @@ namespace HospitalManagement.Api.Controllers
                     return BadRequest("Unable to send email");
                 }
 
-                return CreatedAtAction(
-                    nameof(GetDoctorByIdentityNumberAsync), 
-                    new { doctorIdentityNumber = entityCreated.IdentificationNumber }, 
-                    new ApiResponse<DoctorRequestDto> { 
-                        Success = true,
-                        Errors = null,
-                        Data = _mapper.Map<DoctorRequestDto>(entityCreated)
-                    }
+                return CreatedAtRoute(
+                    nameof(GetDoctorByIdentityNumberAsync),
+                    new { doctorIdentityNumber = entityCreated.IdentificationNumber },
+                    _mapper.Map<DoctorRequestDto>(entityCreated)
                 );
             }
             catch (Exception ex)
@@ -93,7 +89,7 @@ namespace HospitalManagement.Api.Controllers
             }
         }
 
-        [HttpGet("{doctorIdentityNumber}")]
+        [HttpGet("{doctorIdentityNumber}", Name = nameof(GetDoctorByIdentityNumberAsync))]
         public async Task<IActionResult> GetDoctorByIdentityNumberAsync(string doctorIdentityNumber)
         {
             try

@@ -55,11 +55,15 @@ namespace HospitalManagement.Api.Controllers
                     return BadRequest("Unable to send email");
                 }
 
-                return Ok(_mapper.Map<PatientRequestDto>(patientCreated));
+                return CreatedAtRoute(
+                    nameof(GetPatientByIdentityNumberAsync), 
+                    new { patientIdentificationNumber = patientCreated.IdentificationNumber }, 
+                    _mapper.Map<PatientRequestDto>(patientCreated)
+                );
 
             } catch(Exception ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(new { Message = $"{ex.Message} here" });
             }
         }
 
@@ -79,6 +83,25 @@ namespace HospitalManagement.Api.Controllers
             } catch (Exception ex)
             {
                 return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpGet("{patientIdentificationNumber}", Name = nameof(GetPatientByIdentityNumberAsync))]
+        public async Task<IActionResult> GetPatientByIdentityNumberAsync(string patientIdentificationNumber)
+        {
+            try
+            {
+                var patient = await _unitOfWork.Patients.GetPatientByIdentityNumber(patientIdentificationNumber);
+
+                if (patient == null)
+                {
+                    return NotFound("No patient with the specified identity number");
+                }
+
+                return Ok(_mapper.Map<PatientRequestDto>(patient));
+            } catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

@@ -36,7 +36,9 @@ namespace HospitalManagement.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HospitalManagement.Api", Version = "v1" });
@@ -55,6 +57,7 @@ namespace HospitalManagement.Api
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDoctorsRepository, DoctorsRepository>();
             services.AddScoped<IPatientsRepository, PatientsRepository>();
+            services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
             

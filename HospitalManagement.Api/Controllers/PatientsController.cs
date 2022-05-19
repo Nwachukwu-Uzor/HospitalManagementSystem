@@ -94,7 +94,7 @@ namespace HospitalManagement.Api.Controllers
 
                 if (patient == null)
                 {
-                    return NotFound("No patient with the specified identity number");
+                    return NotFound("No patient with the specified identity number, please supply a valid identity number");
                 }
 
                 return Ok(_mapper.Map<PatientRequestDto>(patient));

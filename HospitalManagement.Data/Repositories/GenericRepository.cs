@@ -40,7 +40,7 @@ namespace HospitalManagement.Data.Repositories
 
         public virtual async Task<IEnumerable<T>> GetAllPaginatedAsync(int pageNumber, int pageSize)
         {
-            return await _dbSet.Where(entity => entity.Status == 1).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return await _dbSet.Where(entity => entity.Status == 1).Skip((pageNumber - 1) * pageSize).Take(pageSize).OrderBy(pat => pat.CreatedAt).ToListAsync();
         }
 
         public virtual async Task<T> GetByIdAsync(Guid id)

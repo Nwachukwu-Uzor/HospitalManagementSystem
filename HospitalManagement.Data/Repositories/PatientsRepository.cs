@@ -29,6 +29,13 @@ namespace HospitalManagement.Data.Repositories
                 return await AddAsync(entity);
             }
 
+            var patientByEmail = await _dbSet.Where(doct => doct.Email == entity.Email).FirstOrDefaultAsync();
+
+            if (patientByEmail != null)
+            {
+                throw new ArgumentException("A patient exists with the email provided");
+            }
+
             entity.IdentificationNumber = randomId;
 
             return await base.AddAsync(entity);

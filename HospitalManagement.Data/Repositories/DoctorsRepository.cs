@@ -24,9 +24,18 @@ namespace HospitalManagement.Data.Repositories
 
             var doesDoctorExist = await GetDoctorByIdentityNumber(randomId);
 
+
+            // Develop a more efficient way to ensure the identity number is unique
             if (doesDoctorExist != null)
             {
                 return await AddAsync(entity);
+            }
+
+            var doctorByEmail = await _dbSet.Where(doct => doct.Email == entity.Email).FirstOrDefaultAsync();
+
+            if (doctorByEmail != null)
+            {
+                throw new ArgumentException("A doctor exists with the email provided");
             }
 
             entity.IdentificationNumber = randomId;
@@ -46,14 +55,7 @@ namespace HospitalManagement.Data.Repositories
 
         public async Task<Doctor> GetDoctorByIdentityNumber(string identityNumber)
         {
-           var doctor = await _dbSet.Where(doctor => doctor.IdentificationNumber == identityNumber).FirstOrDefaultAsync();
-
-            if (doctor == null)
-            {
-                throw new ArgumentException("No doctor with the identity number provided");
-            }
-
-            return doctor;
+           return await _dbSet.Where(doctor => doctor.IdentificationNumber == identityNumber).FirstOrDefaultAsync();
         }
     }
 }

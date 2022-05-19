@@ -17,8 +17,21 @@ namespace HospitalManagement.Services
 
         public EmailService(IOptions<SendGridApi> options)
         {
-            _sendGridApi = options.Value;
+            _sendGridApi = options.Value ?? throw new ArgumentException(nameof(SendGridApi));
         }
+
+        public Email CreateAccountRegistrationMail(string identificationNumber, string email, string firstName, string lastName, string accountType)
+        {
+            return new Email
+            {
+                Body = $"<h3>YOU HAVE BEEN SUCCESSFULLY REGISTERED AS A {accountType.ToUpper()}</h1>" +
+                    $"<p>Your identification number is {identificationNumber}</p>",
+                ToEmail = email,
+                ToName = $"{firstName} {lastName}",
+                Subject = "Account Created"
+            };
+        }
+
         public async Task<bool> SendMail(Email email)
         {
             try

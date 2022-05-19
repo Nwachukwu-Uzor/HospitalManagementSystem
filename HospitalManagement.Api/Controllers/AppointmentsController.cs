@@ -23,14 +23,16 @@ namespace HospitalManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAppoint(AppointmentCreationDto appointmentCreationDto)
+        public async Task<IActionResult> CreateAppointment
+            (AppointmentCreationDto appointmentCreationDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Invalid information to create appointment");
-            }
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid information to create appointment");
+                }
+
                 var patient = await _unitOfWork.Patients.GetPatientByIdentityNumber(appointmentCreationDto.PatientIdentityNumber);
 
                 if (patient == null)
@@ -93,6 +95,38 @@ namespace HospitalManagement.Api.Controllers
             } catch(Exception ex)
             {
                 return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet("doctors/{doctorIdentificationNumber}")]
+        public async Task<IActionResult> GetAppointmentByDoctorIdAsync(
+            string doctorIdentificationNumber, int pageSize=10, int pageNumber=1
+        )
+        {
+            try
+            {
+                var appointments = await _unitOfWork.Appointments.GetAppointmentsForDoctorAsync(doctorIdentificationNumber, pageSize, pageNumber);
+
+                return Ok(_mapper.Map<IEnumerable<AppointmentRequestDto>>(appointments));
+            } catch(Exception ex)
+            {
+                return NotFound($"{ ex.Message} {nameof(GetAppointmentByDoctorIdAsync)}");
+            }
+        }
+        
+        [HttpGet("patients/{patientIdentificationNumber}")]
+        public async Task<IActionResult> GetAppointmentByPatientIdAsync(
+            string patientIdentificationNumber, int pageSize=10, int pageNumber=1
+        )
+        {
+            try
+            {
+                var appointments = await _unitOfWork.Appointments.GetAppointmentsForPatientAsync(patientIdentificationNumber, pageSize, pageNumber);
+
+                return Ok(_mapper.Map<IEnumerable<AppointmentRequestDto>>(appointments));
+            } catch(Exception ex)
+            {
+                return NotFound($"{ ex.Message} {nameof(GetAppointmentByDoctorIdAsync)}");
             }
         }
     }

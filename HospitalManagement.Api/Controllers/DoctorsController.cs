@@ -42,14 +42,13 @@ namespace HospitalManagement.Api.Controllers
                     return BadRequest("Unable to create doctor account with the data provided");
                 }
 
-                var emailToSend = new Email
-                {
-                    Body = $"<h1>YOU HAVE BEEN SUCCESSFULLY REGISTERED AS A DOCTOR</h1>" +
-                    $"<p>Your identification number is {userEntity.IdentificationNumber}</p>",
-                    ToEmail = userEntity.Email,
-                    ToName = $"{userEntity.FirstName} {userEntity.LastName}",
-                    Subject = "Account Created"
-                };
+                var emailToSend = _emailService.CreateAccountRegistrationMail(
+                    entityCreated.IdentificationNumber, 
+                    entityCreated.Email,
+                    entityCreated.FirstName,
+                    entityCreated.LastName,
+                    "Doctor"
+                );
 
                 var isEmailSent = await _emailService.SendMail(emailToSend);
 

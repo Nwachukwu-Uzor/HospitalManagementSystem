@@ -39,14 +39,13 @@ namespace HospitalManagement.Api.Controllers
                     return BadRequest("Unable to create patient with the data provided");
                 }
 
-                var emailToSend = new Email
-                {
-                    Body = $"<h1>YOU HAVE BEEN SUCCESSFULLY REGISTERED AS A PATIENT</h1>" +
-                    $"<p>Your identification number is {patientCreated.IdentificationNumber}</p>",
-                    ToEmail = patientRegistrationDto.Email,
-                    ToName = $"{patientCreated.FirstName} {patientCreated.LastName}",
-                    Subject = "Account Created"
-                };
+                var emailToSend = _emailService.CreateAccountRegistrationMail(
+                   patientCreated.IdentificationNumber,
+                   patientCreated.Email,
+                   patientCreated.FirstName,
+                   patientCreated.LastName,
+                   "Patient"
+               );
 
                 var isEmailSent = await _emailService.SendMail(emailToSend);
 

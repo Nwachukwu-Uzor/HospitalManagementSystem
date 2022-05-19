@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace HospitalManagement.Data.Entities
 {
     public class Appointment : BaseEntity
-    {
+    { 
         public Patient Patient { get; set; }
         public Guid PatientId { get; set; }
         public Doctor Doctor { get; set; }

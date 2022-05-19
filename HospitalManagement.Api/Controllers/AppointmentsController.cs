@@ -54,6 +54,13 @@ namespace HospitalManagement.Api.Controllers
 
                 var appointmentAdded = await _unitOfWork.Appointments.AddAsync(appointment);
 
+                var doctorName = $"{doctor.FirstName} {doctor.LastName}";
+                var appointmentDate = appointmentAdded.AppointmentDate.ToShortDateString();
+
+                var emailToSend = _emailService.GenerateAppointmentEmail(patient.Email, doctorName, doctor.IdentificationNumber, appointmentDate);
+
+                var isEmailSent = await _emailService.SendMail(emailToSend);
+
                 // return Ok(_mapper.Map<AppointmentRequestDto>(appointmentAdded));
                 return CreatedAtRoute(
                     nameof(GetAppointmentById), 

@@ -8,6 +8,6 @@ namespace HospitalManagement.Services.Contracts
         Task<bool> SendMail(Email email);
 
         Email CreateAccountRegistrationMail(string identificationNumber, string email, string firstName, string lastName, string accountType);
-        Email GenerateAppointmentEmail(string doctorName, string doctorIdentityNumber, string date);
+        Email GenerateAppointmentEmail(string email, string doctorName, string doctorIdentityNumber, string date);
     }
 }

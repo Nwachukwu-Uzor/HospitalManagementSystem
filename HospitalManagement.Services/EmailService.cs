@@ -1,9 +1,6 @@
 ﻿using HospitalManagement.Services.Contracts;
 using HospitalManagement.Services.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -20,7 +17,13 @@ namespace HospitalManagement.Services
             _sendGridApi = options.Value ?? throw new ArgumentException(nameof(SendGridApi));
         }
 
-        public Email CreateAccountRegistrationMail(string identificationNumber, string email, string firstName, string lastName, string accountType)
+        public Email CreateAccountRegistrationMail(
+            string identificationNumber, 
+            string email, 
+            string firstName, 
+            string lastName, 
+            string accountType
+        )
         {
             return new Email
             {
@@ -29,6 +32,24 @@ namespace HospitalManagement.Services
                 ToEmail = email,
                 ToName = $"{firstName} {lastName}",
                 Subject = "Account Created"
+            };
+        }
+
+        public Email GenerateAppointmentEmail(
+            string email, 
+            string doctorName, 
+            string doctorIdentityNumber, 
+            string date
+        )
+        {
+            return new Email
+            {
+                Body = $"<h3>You have an appointment on<h3>" +
+                  $"<p>With Dr. {doctorName} (Identity Number: {doctorIdentityNumber})</p>" +
+                  $"Date: {date}",
+                ToEmail = email,
+                ToName = null,
+                Subject = "Appointment Scheduled"
             };
         }
 

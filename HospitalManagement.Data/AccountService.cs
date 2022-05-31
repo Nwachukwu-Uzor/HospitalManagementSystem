@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using HospitalManagement.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,14 +8,14 @@ namespace HospitalManagement.Data
 {
     public class AccountService : IAccountService
     {
-       private readonly UserManager<IdentityUser> _userManager;
+       private readonly UserManager<AppUser> _userManager;
 
-        public AccountService(UserManager<IdentityUser> userManager)
+        public AccountService(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
         }
 
-        public async Task<IdentityUser> CreateUserAccountAsync(IdentityUser user, string password)
+        public async Task<AppUser> CreateUserAccountAsync(AppUser user, string password)
         {
             var userExist = await _userManager.FindByEmailAsync(user.Email);
 
@@ -38,7 +39,7 @@ namespace HospitalManagement.Data
             return user;
         }
 
-        public async Task<IdentityUser> SignInUserAsync(string email, string password)
+        public async Task<AppUser> SignInUserAsync(string email, string password)
         {
             var accountExists = await _userManager.FindByEmailAsync(email);
 

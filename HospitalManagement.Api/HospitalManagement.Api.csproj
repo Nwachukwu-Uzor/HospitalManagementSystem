@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HospitalManagement.Commons\HospitalManagement.Commons.csproj" />
     <ProjectReference Include="..\HospitalManagement.Data\HospitalManagement.Data.csproj" />
   </ItemGroup>
 

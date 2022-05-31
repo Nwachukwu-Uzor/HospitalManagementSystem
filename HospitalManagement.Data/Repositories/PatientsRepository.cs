@@ -18,6 +18,16 @@ namespace HospitalManagement.Data.Repositories
             _identityNumberGenerator = identityNumberGenerator;
         }
 
+        public override async Task<IEnumerable<Patient>> GetAllPaginatedAsync(int pageNumber, int pageSize)
+        {
+            return await _dbSet.Where(entity => entity.Status == 1).Include(patient => patient.User).Skip((pageNumber - 1) * pageSize).Take(pageSize).OrderBy(pat => pat.CreatedAt).ToListAsync();
+        }
+
+        public override async Task<Patient> GetByIdAsync(Guid id)
+        {
+            return await _dbSet.Where(entity => entity.Id == id && entity.Status == 1).Include(patient => patient.User).FirstOrDefaultAsync();
+        }
+
         public override async Task<Patient> AddAsync(Patient entity)
         {
             var randomId = _identityNumberGenerator.GenerateIdNumber("PT");
@@ -29,7 +39,7 @@ namespace HospitalManagement.Data.Repositories
                 return await AddAsync(entity);
             }
 
-            var patientByEmail = await _dbSet.Where(doct => doct.Email == entity.Email).FirstOrDefaultAsync();
+            var patientByEmail = await _dbSet.Where(patient => patient.User.Email == entity.User.Email).FirstOrDefaultAsync();
 
             if (patientByEmail != null)
             {

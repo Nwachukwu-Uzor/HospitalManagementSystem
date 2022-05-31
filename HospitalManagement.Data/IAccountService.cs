@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using HospitalManagement.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace HospitalManagement.Data
 {
     public interface IAccountService
     {
-        Task<IdentityUser> CreateUserAccountAsync(IdentityUser users, string password);
-        Task<IdentityUser> SignInUserAsync(string email, string password);
+        Task<AppUser> CreateUserAccountAsync(AppUser users, string password);
+        Task<AppUser> SignInUserAsync(string email, string password);
     }
 }

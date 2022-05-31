@@ -14,12 +14,20 @@ namespace HospitalManagement.Api.Controllers
         protected readonly IMapper _mapper;
         protected readonly IAccountService _accountService;
         protected readonly IEmailService _emailService;
-        public BaseController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService)
+        protected readonly ISmsService _smsService;
+
+        public BaseController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _accountService = accountService;
             _emailService = emailService;
+            _smsService = smsService;
         }
+
+        public IUnitOfWork UnitOfWork { get; }
+        public IMapper Mapper { get; }
+        public IAccountService AccountService { get; }
+        public IEmailService EmailService { get; }
     }
 }

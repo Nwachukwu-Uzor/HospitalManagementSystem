@@ -17,8 +17,8 @@ namespace HospitalManagement.Api.Controllers
 {
     public class DoctorsController : BaseController
     {
-        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService)
-        : base(unitOfWork, mapper, accountService, emailService)
+        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService)
+        : base(unitOfWork, mapper, accountService, emailService, smsService)
         {
             
         }
@@ -32,10 +32,11 @@ namespace HospitalManagement.Api.Controllers
             }
             try
             {
-                var doctorAccountEntity = _mapper.Map<IdentityUser>(registrationDto);
+                var doctorAccountEntity = _mapper.Map<AppUser>(registrationDto);
                 var doctorAccountCreated = await _accountService.CreateUserAccountAsync(doctorAccountEntity, registrationDto.Password);
                 var userEntity = _mapper.Map<Doctor>(registrationDto);
-                userEntity.IdentityId = Guid.Parse(doctorAccountCreated.Id);
+                userEntity.UserId = Guid.Parse(doctorAccountCreated.Id);
+                userEntity.User = doctorAccountCreated;
                 var entityCreated = await _unitOfWork.Doctors.AddAsync(userEntity);
                 if (entityCreated == null)
                 {
@@ -44,9 +45,9 @@ namespace HospitalManagement.Api.Controllers
 
                 var emailToSend = _emailService.CreateAccountRegistrationMail(
                     entityCreated.IdentificationNumber, 
-                    entityCreated.Email,
-                    entityCreated.FirstName,
-                    entityCreated.LastName,
+                    entityCreated.User.Email,
+                    entityCreated.User.FirstName,
+                    entityCreated.User.LastName,
                     "Doctor"
                 );
 

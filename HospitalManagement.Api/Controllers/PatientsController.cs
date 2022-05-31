@@ -18,8 +18,8 @@ namespace HospitalManagement.Api.Controllers
 {
     public class PatientsController : BaseController
     {
-        public PatientsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService)
-        : base(unitOfWork, mapper, accountService, emailService)
+        public PatientsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService)
+        : base(unitOfWork, mapper, accountService, emailService, smsService)
         { }
 
         [HttpPost]
@@ -27,10 +27,10 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var patientIdentityEntity = _mapper.Map<IdentityUser>(patientRegistrationDto);
+                var patientIdentityEntity = _mapper.Map<AppUser>(patientRegistrationDto);
                 var patientAccountCreated = await _accountService.CreateUserAccountAsync(patientIdentityEntity, patientRegistrationDto.Password);
                 var patientEntity = _mapper.Map<Patient>(patientRegistrationDto);
-                patientEntity.IdentityId = new Guid(patientIdentityEntity.Id);
+                patientEntity.UserId = new Guid(patientIdentityEntity.Id);
 
                 var patientCreated = await _unitOfWork.Patients.AddAsync(patientEntity);
 
@@ -41,23 +41,31 @@ namespace HospitalManagement.Api.Controllers
 
                 var emailToSend = _emailService.CreateAccountRegistrationMail(
                    patientCreated.IdentificationNumber,
-                   patientCreated.Email,
-                   patientCreated.FirstName,
-                   patientCreated.LastName,
+                   patientCreated.User.Email,
+                   patientCreated.User.FirstName,
+                   patientCreated.User.LastName,
                    "Patient"
                );
 
-                var isEmailSent = await _emailService.SendMail(emailToSend);
 
-                if (!isEmailSent)
-                {
-                    return BadRequest("Unable to send email");
-                }
+                var isEmailSent = await _emailService.SendMail(emailToSend);
+                //var smsToSend = new SMS() { Body = $"Dear {patientRegistrationDto.FirstName}, " +
+                    //$"your account has been created with the {patientCreated.IdentificationNumber}", 
+                    //To = patientRegistrationDto.PhoneNumber 
+                //};
+               // var resp = _smsService.SendSms(smsToSend);
+
+               // if (!isEmailSent)
+               // {
+               //     return BadRequest("Unable to send email");
+               // }
+
+
 
                 return CreatedAtRoute(
                     nameof(GetPatientByIdentityNumberAsync), 
                     new { patientIdentificationNumber = patientCreated.IdentificationNumber }, 
-                    _mapper.Map<PatientRequestDto>(patientCreated)
+                     _mapper.Map<PatientRequestDto>(patientCreated)
                 );
 
             } catch(Exception ex)

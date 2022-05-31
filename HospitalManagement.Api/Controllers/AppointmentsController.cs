@@ -5,6 +5,7 @@ using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
 using HospitalManagement.Services.Contracts;
+using HospitalManagement.Services.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,9 +16,9 @@ using System.Threading.Tasks;
 namespace HospitalManagement.Api.Controllers
 {
     public class AppointmentsController : BaseController
-    {
-        public AppointmentsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService)
-            : base (unitOfWork, mapper, accountService, emailService)
+    { 
+        public AppointmentsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService)
+            : base (unitOfWork, mapper, accountService, emailService, smsService)
         {
 
         }
@@ -54,12 +55,13 @@ namespace HospitalManagement.Api.Controllers
 
                 var appointmentAdded = await _unitOfWork.Appointments.AddAsync(appointment);
 
-                var doctorName = $"{doctor.FirstName} {doctor.LastName}";
+                var doctorName = $"{doctor.User.FirstName} {doctor.User.LastName}";
                 var appointmentDate = appointmentAdded.AppointmentDate.ToShortDateString();
 
-                var emailToSend = _emailService.GenerateAppointmentEmail(patient.Email, doctorName, doctor.IdentificationNumber, appointmentDate);
+                // var emailToSend = _emailService.GenerateAppointmentEmail(patient.Email, doctorName, doctor.IdentificationNumber, appointmentDate);
+                var smsToSend = new SMS() { Body = $"Dear {patient.User.FirstName}, you have an appointment on {appointmentDate}" };
 
-                var isEmailSent = await _emailService.SendMail(emailToSend);
+                // var isEmailSent = await _emailService.SendMail(emailToSend);
 
                 // return Ok(_mapper.Map<AppointmentRequestDto>(appointmentAdded));
                 return CreatedAtRoute(
@@ -79,6 +81,7 @@ namespace HospitalManagement.Api.Controllers
             try
             {
                 var appointments = await _unitOfWork.Appointments.GetAllPaginatedAsync(page, pageSize);
+                Response.Headers.Add("page", page.ToString());
                 return Ok(_mapper.Map<IEnumerable<AppointmentRequestDto>>(appointments));
             } catch(Exception ex)
             {
@@ -120,7 +123,7 @@ namespace HospitalManagement.Api.Controllers
                 return NotFound($"{ ex.Message} {nameof(GetAppointmentByDoctorIdAsync)}");
             }
         }
-        
+         
         [HttpGet("patients/{patientIdentificationNumber}")]
         public async Task<IActionResult> GetAppointmentByPatientIdAsync(
             string patientIdentificationNumber, int pageSize=10, int pageNumber=1

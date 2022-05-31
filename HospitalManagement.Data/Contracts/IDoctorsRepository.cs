@@ -9,8 +9,6 @@ namespace HospitalManagement.Data.Contracts
 {
     public interface IDoctorsRepository : IGenericRepository<Doctor>
     {
-        Task<IEnumerable<Appointment>> GetAppointmentsForDoctorAsync(Guid doctorId, int pageSize, int page);
-        Task<IEnumerable<Appointment>> GetDailyAppointmentsForDoctorAsync(Guid doctorId, DateTime date);
         Task<Doctor> GetDoctorByIdentityNumber(string identityNumber);
     }
 }

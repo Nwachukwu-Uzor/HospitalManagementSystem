@@ -12,5 +12,6 @@ namespace HospitalManagement.Data.Contracts
         Task<IEnumerable<Appointment>> GetAppointmentsForPatientAsync(string patientIdentityNumber, int pageSize, int page);
         Task<IEnumerable<Appointment>> GetAppointmentsForDoctorAsync(string doctorIdentityNumber, int pageSize, int page);
         Task<IEnumerable<Appointment>> GetDailyAppointmentsForDoctorAsync(string doctorIdentityNumber, DateTime date);
+        Task<IEnumerable<Appointment>> GetAppointmentsForTheNextDay();
     }
 }

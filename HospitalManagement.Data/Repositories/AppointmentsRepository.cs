@@ -49,8 +49,8 @@ namespace HospitalManagement.Data.Repositories
         public async override Task<IEnumerable<Appointment>> GetAllPaginatedAsync(int pageNumber, int pageSize)
         {
             return await _dbSet.Where(appoint => appoint.Status == 1).Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                                .Include(app => app.Doctor)
-                                .Include(app => app.Patient)
+                                .Include(app => app.Doctor.User)
+                                .Include(app => app.Patient.User)
                                 .OrderBy(app => app.CreatedAt).ToListAsync(); ;
         }
 
@@ -63,8 +63,8 @@ namespace HospitalManagement.Data.Repositories
             )
             .AsNoTracking()
             .OrderByDescending(app => app.CreatedAt)
-            .Include(app => app.Doctor)
-            .Include(app => app.Patient)
+            .Include(app => app.Doctor.User)
+            .Include(app => app.Patient.User)
             .Skip((pageNumber -1) * pageSize)
             .Take(pageSize)
             .OrderByDescending(appointment => appointment.CreatedAt)
@@ -86,8 +86,8 @@ namespace HospitalManagement.Data.Repositories
                 app.Status == 1
             )
             .AsNoTracking()
-            .Include(app => app.Doctor)
-            .Include(app => app.Patient)
+            .Include(app => app.Doctor.User)
+            .Include(app => app.Patient.User)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .OrderByDescending(app => app.CreatedAt)
@@ -124,6 +124,33 @@ namespace HospitalManagement.Data.Repositories
             };
 
             return appointments;
+        }
+
+        Task<IEnumerable<Appointment>> IAppointmentsRepository.GetAppointmentsForDoctorAsync(string doctorIdentityNumber, int pageSize, int page)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<Appointment>> IAppointmentsRepository.GetAppointmentsForPatientAsync(string patientIdentityNumber, int pageSize, int page)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentsForTheNextDay()
+        {
+            return await _dbSet.Where(app => 
+                app.AppointmentDate.DayOfYear == DateTime.UtcNow.AddDays(1).DayOfYear
+                &&
+                app.AppointmentDate.Year == DateTime.UtcNow.Year
+            )
+            .Include(app => app.Doctor.User)
+            .Include(app => app.Patient.User)
+            .OrderBy(app => app.AppointmentDate).ToListAsync();
+        }
+
+        Task<IEnumerable<Appointment>> IAppointmentsRepository.GetDailyAppointmentsForDoctorAsync(string doctorIdentityNumber, DateTime date)
+        {
+            throw new NotImplementedException();
         }
     }
 }

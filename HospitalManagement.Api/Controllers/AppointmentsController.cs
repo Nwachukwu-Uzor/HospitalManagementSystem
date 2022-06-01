@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Hangfire;
 using HospitalManagement.Api.Dtos.Requests;
 using HospitalManagement.Api.Dtos.Responses;
+using HospitalManagement.Commons.Contracts;
 using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
@@ -16,11 +18,18 @@ using System.Threading.Tasks;
 namespace HospitalManagement.Api.Controllers
 {
     public class AppointmentsController : BaseController
-    { 
-        public AppointmentsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService)
+    {
+        private readonly IDateTimeValidator _dateTimeValidator;
+        public AppointmentsController(
+            IUnitOfWork unitOfWork, IMapper mapper, 
+            IAccountService accountService, 
+            IEmailService emailService, 
+            ISmsService smsService,
+            IDateTimeValidator dateTimeValidator
+        )
             : base (unitOfWork, mapper, accountService, emailService, smsService)
         {
-
+            _dateTimeValidator = dateTimeValidator;
         }
 
         [HttpPost]
@@ -56,14 +65,20 @@ namespace HospitalManagement.Api.Controllers
                 var appointmentAdded = await _unitOfWork.Appointments.AddAsync(appointment);
 
                 var doctorName = $"{doctor.User.FirstName} {doctor.User.LastName}";
+
                 var appointmentDate = appointmentAdded.AppointmentDate.ToShortDateString();
+                var alertDate = $"Tomorrow at {appointmentAdded.AppointmentDate.TimeOfDay}";
 
                 // var emailToSend = _emailService.GenerateAppointmentEmail(patient.Email, doctorName, doctor.IdentificationNumber, appointmentDate);
+                var alertEmail = _emailService.GenerateAppointmentEmail(patient.User.Email, doctorName, doctor.IdentificationNumber, alertDate);
+
+                var alertTime = _dateTimeValidator.GenerateAlertDate(appointmentAdded.AppointmentDate);
+
+
                 var smsToSend = new SMS() { Body = $"Dear {patient.User.FirstName}, you have an appointment on {appointmentDate}" };
 
+                var jobId = BackgroundJob.Schedule(() => _emailService.SendMail(alertEmail), alertTime);
                 // var isEmailSent = await _emailService.SendMail(emailToSend);
-
-                // return Ok(_mapper.Map<AppointmentRequestDto>(appointmentAdded));
                 return CreatedAtRoute(
                     nameof(GetAppointmentById), 
                     new { appointmentId = appointmentAdded.Id }, 

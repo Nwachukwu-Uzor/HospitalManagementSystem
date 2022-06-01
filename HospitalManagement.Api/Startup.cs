@@ -1,3 +1,4 @@
+using Hangfire;
 using HospitalManagement.Commons;
 using HospitalManagement.Commons.Contracts;
 using HospitalManagement.Data;
@@ -37,6 +38,7 @@ namespace HospitalManagement.Api
             });
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppDbContext>();
 
@@ -46,6 +48,10 @@ namespace HospitalManagement.Api
                 options.UseSqlServer(Configuration.GetConnectionString("SqlServer"));
             });
 
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("SqlServer")));
+
+            services.AddHangfireServer();
+
 
             services.AddServiceLayerServices();
 
@@ -53,8 +59,8 @@ namespace HospitalManagement.Api
             services.Configure<SendGridApi>(Configuration.GetSection("SendGrid"));
             services.Configure<TwilioApi>(Configuration.GetSection("Twilio"));
 
-            // add datetime validator
-            services.AddScoped<IDateTimeValidator, DateTimeValidator>();
+            // add commons layers services
+            services.AddCommonsLayerServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +73,7 @@ namespace HospitalManagement.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HospitalManagement.Api v1"));
             }
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -77,6 +83,8 @@ namespace HospitalManagement.Api
             {
                 endpoints.MapControllers();
             });
+
+            app.UseHangfireDashboard();
         }
     }
 }

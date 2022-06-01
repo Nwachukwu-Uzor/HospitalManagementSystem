@@ -44,7 +44,7 @@ namespace HospitalManagement.Services
         {
             return new Email
             {
-                Body = $"<h3>You have an appointment on<h3>" +
+                Body = $"<h3>You have an appointment on {date}<h3>" +
                   $"<p>With Dr. {doctorName} (Identity Number: {doctorIdentityNumber})</p>" +
                   $"Date: {date}",
                 ToEmail = email,

@@ -31,6 +31,7 @@ namespace HospitalManagement.Api.Controllers
                 var patientAccountCreated = await _accountService.CreateUserAccountAsync(patientIdentityEntity, patientRegistrationDto.Password);
                 var patientEntity = _mapper.Map<Patient>(patientRegistrationDto);
                 patientEntity.UserId = new Guid(patientIdentityEntity.Id);
+                patientEntity.User = patientAccountCreated;
 
                 var patientCreated = await _unitOfWork.Patients.AddAsync(patientEntity);
 

@@ -57,7 +57,7 @@ namespace HospitalManagement.Data.Repositories
                 patient.IdentificationNumber == identityNumber 
                 && 
                 patient.Status == 1
-            ).FirstOrDefaultAsync();
+            ).Include(patient => patient.User).FirstOrDefaultAsync();
         }
     }
 }

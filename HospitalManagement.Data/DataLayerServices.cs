@@ -21,6 +21,7 @@ namespace HospitalManagement.Data
             services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDrugRepository, DrugRepository>();
         }
     }
 }

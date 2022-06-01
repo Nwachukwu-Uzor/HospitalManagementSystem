@@ -10,11 +10,17 @@ namespace HospitalManagement.Data
 
         public IAppointmentsRepository Appointments { get; }
 
-        public UnitOfWork(IDoctorsRepository doctors, IPatientsRepository patients, IAppointmentsRepository appointments)
+        public IDrugRepository Drugs { get; }
+
+        public UnitOfWork(
+            IDoctorsRepository doctors, IPatientsRepository patients, 
+            IAppointmentsRepository appointments, IDrugRepository drugs
+        )
         {
             Doctors = doctors;
             Patients = patients;
             Appointments = appointments;
+            Drugs = drugs;
         }
     }
 }

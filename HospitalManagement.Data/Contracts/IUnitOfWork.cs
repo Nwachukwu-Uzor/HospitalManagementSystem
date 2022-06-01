@@ -12,5 +12,7 @@ namespace HospitalManagement.Data.Contracts
         public IPatientsRepository Patients { get; }
 
         public IAppointmentsRepository Appointments { get; }
+
+        public IDrugRepository Drugs { get; }
     }
 }

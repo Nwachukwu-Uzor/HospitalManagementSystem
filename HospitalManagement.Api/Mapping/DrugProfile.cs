@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using HospitalManagement.Api.Dtos.Requests;
+using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HospitalManagement.Api.Mapping
 {
@@ -13,6 +10,7 @@ namespace HospitalManagement.Api.Mapping
         public DrugProfile()
         {
             CreateMap<DrugCreationDto, Drug>();
+            CreateMap<Drug, DrugRequestDto>();
         }
     }
 }

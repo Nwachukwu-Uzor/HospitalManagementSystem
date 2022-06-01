@@ -1,6 +1,7 @@
 ﻿using HospitalManagement.Commons.Contracts;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
+using HospitalManagement.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,17 @@ namespace HospitalManagement.Data.Repositories
         private readonly int _maxDailyAppointments = 3;
 
         private readonly IDateTimeValidator _dateTimeValidator;
-        public AppointmentsRepository(AppDbContext context, IDateTimeValidator dateTimeValidator) : base(context)
+        private readonly IIdentityNumberGenerator _identityNumberGenerator;
+
+        public AppointmentsRepository(
+            AppDbContext context, 
+            IDateTimeValidator dateTimeValidator,
+            IIdentityNumberGenerator identityNumberGenerator
+        ) 
+        : base(context)
         {
             _dateTimeValidator = dateTimeValidator;
+            _identityNumberGenerator = identityNumberGenerator;
         }
 
         public override async Task<Appointment> AddAsync(Appointment appointment)
@@ -43,6 +52,10 @@ namespace HospitalManagement.Data.Repositories
                     $"Dr. {appointment.Doctor.User.FirstName} {appointment.Doctor.User.LastName} already has to {_maxDailyAppointments} appointments"
                 );
             }
+
+            var referenceNumber = _identityNumberGenerator.GenerateIdNumber("AP", 20);
+
+            appointment.ReferenceNumber = referenceNumber;
 
             return await base.AddAsync(appointment);
         }

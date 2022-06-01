@@ -19,6 +19,6 @@ namespace HospitalManagement.Api.Dtos.Requests
         public string Description { get; set; }
         [Required]
         [Range(1, int.MaxValue)]
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
     }
 }

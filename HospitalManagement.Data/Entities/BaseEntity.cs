@@ -10,7 +10,7 @@ namespace HospitalManagement.Data.Entities
     {
         public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime ModifiedOn { get; set; }
+        public DateTime ModifiedOn { get; set; } = DateTime.UtcNow;
         public int Status { get; set; } = 1;
     }
 }

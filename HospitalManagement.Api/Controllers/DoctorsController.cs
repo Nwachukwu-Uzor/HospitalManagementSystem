@@ -24,11 +24,13 @@ namespace HospitalManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDoctorAsync(DoctorRegistrationDto registrationDto)
+        public async Task<ActionResult<DoctorRequestDto>> CreateDoctorAsync(DoctorRegistrationDto registrationDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Something went wrong");
+                return BadRequest(
+                    GenerateApiResponse<DoctorRequestDto>.GenerateFailureResponse("Something went wrong")
+                );
             }
             try
             {
@@ -40,7 +42,10 @@ namespace HospitalManagement.Api.Controllers
                 var entityCreated = await _unitOfWork.Doctors.AddAsync(userEntity);
                 if (entityCreated == null)
                 {
-                    return BadRequest("Unable to create doctor account with the data provided");
+                    return BadRequest(
+                        GenerateApiResponse<DoctorRequestDto>
+                            .GenerateFailureResponse("Unable to create doctor account with the data provided")
+                    );
                 }
 
                 var emailToSend = _emailService.CreateAccountRegistrationMail(
@@ -53,39 +58,32 @@ namespace HospitalManagement.Api.Controllers
 
                 var isEmailSent = await _emailService.SendMail(emailToSend);
 
-                if (!isEmailSent)
-                {
-                    return BadRequest("Unable to send email");
-                }
-
                 return CreatedAtRoute(
                     nameof(GetDoctorByIdentityNumberAsync),
                     new { doctorIdentityNumber = entityCreated.IdentificationNumber },
-                    _mapper.Map<DoctorRequestDto>(entityCreated)
+                    GenerateApiResponse<DoctorRequestDto>.GenerateSuccessResponse(_mapper.Map<DoctorRequestDto>(entityCreated))
                 );
             }
             catch (Exception ex)
             {
-                return BadRequest($"Something wrong {ex.Message}");
+                return BadRequest(GenerateApiResponse<DoctorRequestDto>.GenerateFailureResponse(ex.Message));
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllDoctorsAsync(int pageNumber = 1, int pageSize = 50)
+        public async Task<ActionResult<IEnumerable<DoctorRequestDto>>> GetAllDoctorsAsync(int pageNumber = 1, int pageSize = 50)
         {
             try
             {
                 var doctors = await _unitOfWork.Doctors.GetAllPaginatedAsync(pageNumber, pageSize);
-                return Ok(new ApiResponse<IEnumerable<DoctorRequestDto>>
-                {
-                    Success = true,
-                    Errors = null,
-                    Data = _mapper.Map<IEnumerable<DoctorRequestDto>>(doctors)
-                });
+                return Ok(
+                    GenerateApiResponse<IEnumerable<DoctorRequestDto>>
+                    .GenerateSuccessResponse(_mapper.Map<IEnumerable<DoctorRequestDto>>(doctors))
+                );
             }
             catch (Exception ex)
             {
-                return BadRequest($"Unable to get doctors {ex.Message}");
+                return BadRequest(GenerateApiResponse<DoctorRequestDto>.GenerateFailureResponse($"Unable to get doctors {ex.Message}"));
             }
         }
 
@@ -96,10 +94,16 @@ namespace HospitalManagement.Api.Controllers
             {
                 var doctor = await _unitOfWork.Doctors.GetDoctorByIdentityNumber(doctorIdentityNumber);
 
-                return Ok(_mapper.Map<DoctorRequestDto>(doctor));
+                return Ok(
+                    GenerateApiResponse<DoctorRequestDto>
+                        .GenerateSuccessResponse(_mapper.Map<DoctorRequestDto>(doctor))
+                );
             } catch(Exception ex)
             {
-                return BadRequest(new { ex.Message });
+                return BadRequest(
+                    GenerateApiResponse<DoctorRequestDto>
+                        .GenerateFailureResponse(ex.Message)
+                );
             }
         }
     }

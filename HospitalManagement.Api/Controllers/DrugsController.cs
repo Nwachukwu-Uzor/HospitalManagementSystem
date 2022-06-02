@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HospitalManagement.Api.Dtos.Requests;
 using HospitalManagement.Api.Dtos.Responses;
+using HospitalManagement.Api.Response;
 using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
@@ -23,7 +24,7 @@ namespace HospitalManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDrug(DrugCreationDto drugCreationDto) 
+        public async Task<ActionResult<DrugRequestDto>> CreateDrug(DrugCreationDto drugCreationDto) 
         {
             try
             {
@@ -39,31 +40,31 @@ namespace HospitalManagement.Api.Controllers
                 return CreatedAtAction(
                     nameof(GetDrugByIdentityNumber),
                     new { identityNumber = drug.IdentificationNumber },
-                    _mapper.Map<DrugRequestDto>(drug)
+                    GenerateApiResponse<DrugRequestDto>.GenerateSuccessResponse(_mapper.Map<DrugRequestDto>(drug))
                 );
 
             } catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse(ex.Message));
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllDrugs(int page = 1, int size = 50)
+        public async Task<ActionResult<IEnumerable<DrugRequestDto>>> GetAllDrugs(int page = 1, int size = 50)
         {
             try
             {
                 var drugs = await _unitOfWork.Drugs.GetAllPaginatedAsync(page, size);
 
-                return Ok(_mapper.Map<IEnumerable<DrugRequestDto>>(drugs));
+                return Ok(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateSuccessResponse(_mapper.Map<IEnumerable<DrugRequestDto>>(drugs)));
             } catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateFailureResponse(ex.Message));
             }
         }
 
-        [HttpGet("identityNumber", Name = nameof(GetDrugByIdentityNumber))]
-        public async Task<IActionResult> GetDrugByIdentityNumber(string identityNumber)
+        [HttpGet("{identityNumber}", Name = nameof(GetDrugByIdentityNumber))]
+        public async Task<ActionResult<DrugRequestDto>> GetDrugByIdentityNumber(string identityNumber)
         {
             try
             {
@@ -71,13 +72,41 @@ namespace HospitalManagement.Api.Controllers
 
                 if (drug == null)
                 {
-                    return NotFound("No drug found with the identity number provided");
+                    return NotFound(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse("No drug found with the identity number provided"));
                 }
 
-                return Ok(_mapper.Map<DrugRequestDto>(drug));
+                return Ok(GenerateApiResponse<DrugRequestDto>.GenerateSuccessResponse(_mapper.Map<DrugRequestDto>(drug)));
             } catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse(ex.Message));
+            }
+        }
+
+        [HttpPut("{identityNumber}/update")]
+        public async Task<ActionResult<DrugRequestDto>> UpdateDrug(string identityNumber, DrugUpdateDto drugDto)
+        {
+            try
+            {
+                var drug = await _unitOfWork.Drugs.GetDrugByIdentityNumber(identityNumber);
+
+                if (drug == null)
+                {
+                    return NotFound(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse("No drug found with the identity number provided"));
+                }
+                var updatedDrug = _mapper.Map(drugDto, drug);
+
+                var updatedDrugEntity = await _unitOfWork.Drugs.UpdateAsync(updatedDrug);
+
+                if(updatedDrugEntity == null)
+                {
+                    return BadRequest(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse("Unable to Update Drug"));
+                }
+
+                return Ok(GenerateApiResponse<DrugRequestDto>.GenerateSuccessResponse(_mapper.Map<DrugRequestDto>(updatedDrug)));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse(ex.Message));
             }
         }
     }

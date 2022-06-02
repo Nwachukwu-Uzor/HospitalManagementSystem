@@ -11,6 +11,8 @@ namespace HospitalManagement.Data.Contracts
         Task<IEnumerable<T>> GetAllPaginatedAsync(int pageNumber, int pageSize);
         Task<T> GetByIdAsync(Guid id);
         Task<T> AddAsync(T entity);
+
+        Task<T> UpdateAsync(T entity);
         Task<bool> DeleteAsync(Guid id);
     }
 }

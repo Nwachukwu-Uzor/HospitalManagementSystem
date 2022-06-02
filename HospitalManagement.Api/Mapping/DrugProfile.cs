@@ -11,6 +11,7 @@ namespace HospitalManagement.Api.Mapping
         {
             CreateMap<DrugCreationDto, Drug>();
             CreateMap<Drug, DrugRequestDto>();
+            CreateMap<DrugUpdateDto, Drug>();
         }
     }
 }

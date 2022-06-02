@@ -42,5 +42,22 @@ namespace HospitalManagement.Data.Repositories
         {
             return await _dbSet.Where(drug => drug.IdentificationNumber == identityNumber && drug.Status == 1).FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<Drug>> SearchForDrugByNameOrDescription(string name, string description, int page, int size)
+        {
+            var drugs = _dbSet.Where(drg => drg.Status == 1).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(name.Trim()))
+            {
+                drugs = drugs.Where(drg => drg.Name.ToLower().Contains(name.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(description.Trim()))
+            {
+                drugs = drugs.Where(drg => drg.Description.ToLower().Contains(description.ToLower()));
+            }
+
+            return await drugs.OrderBy(drg => drg.Name).Skip((page - 1) * size).Take(size).ToListAsync();
+        }
     }
 }

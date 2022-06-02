@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HospitalManagement.Api.Dtos.Requests;
 using HospitalManagement.Api.Dtos.Responses;
+using HospitalManagement.Api.Response;
 using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
@@ -23,7 +24,7 @@ namespace HospitalManagement.Api.Controllers
         { }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePatientAsync(PatientRegistrationDto patientRegistrationDto)
+        public async Task<ActionResult<PatientRequestDto>> CreatePatientAsync(PatientRegistrationDto patientRegistrationDto)
         {
             try
             {
@@ -37,7 +38,7 @@ namespace HospitalManagement.Api.Controllers
 
                 if (patientCreated == null)
                 {
-                    return BadRequest("Unable to create patient with the data provided");
+                    return BadRequest(GenerateApiResponse<AppointmentRequestDto>.GenerateFailureResponse("Unable to create patient with the data provided"));
                 }
 
                 var emailToSend = _emailService.CreateAccountRegistrationMail(
@@ -66,36 +67,32 @@ namespace HospitalManagement.Api.Controllers
                 return CreatedAtRoute(
                     nameof(GetPatientByIdentityNumberAsync), 
                     new { patientIdentificationNumber = patientCreated.IdentificationNumber }, 
-                     _mapper.Map<PatientRequestDto>(patientCreated)
+                     GenerateApiResponse<PatientRequestDto>.GenerateSuccessResponse(_mapper.Map<PatientRequestDto>(patientCreated))
                 );
 
             } catch(Exception ex)
             {
-                return BadRequest(new { Message = $"{ex.Message} here" });
+                return BadRequest(GenerateApiResponse<PatientRequestDto>.GenerateFailureResponse(ex.Message));
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPatients(int page = 1, int pageSize = 50)
+        public async Task<ActionResult<IEnumerable<PatientRequestDto>>> GetAllPatients(int page = 1, int pageSize = 50)
         {
             try
             {
                 var patients = await _unitOfWork.Patients.GetAllPaginatedAsync(page, pageSize);
                 
-                if (patients == null)
-                {
-                    return NotFound();
-                }
 
-                return Ok(_mapper.Map<IEnumerable<PatientRequestDto>>(patients));
+                return Ok(GenerateApiResponse<IEnumerable<PatientRequestDto>>.GenerateSuccessResponse(_mapper.Map<IEnumerable<PatientRequestDto>>(patients)));
             } catch (Exception ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(GenerateApiResponse<IEnumerable<PatientRequestDto>>.GenerateFailureResponse(ex.Message));
             }
         }
 
         [HttpGet("{patientIdentificationNumber}", Name = nameof(GetPatientByIdentityNumberAsync))]
-        public async Task<IActionResult> GetPatientByIdentityNumberAsync(string patientIdentificationNumber)
+        public async Task<ActionResult<PatientRequestDto>> GetPatientByIdentityNumberAsync(string patientIdentificationNumber)
         {
             try
             {
@@ -103,13 +100,13 @@ namespace HospitalManagement.Api.Controllers
 
                 if (patient == null)
                 {
-                    return NotFound("No patient with the specified identity number, please supply a valid identity number");
+                    return NotFound(GenerateApiResponse<PatientRequestDto>.GenerateFailureResponse("No patient with the specified identity number, please supply a valid identity number"));
                 }
 
-                return Ok(_mapper.Map<PatientRequestDto>(patient));
+                return Ok(GenerateApiResponse<PatientRequestDto>.GenerateSuccessResponse(_mapper.Map<PatientRequestDto>(patient)));
             } catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(GenerateApiResponse<PatientRequestDto>.GenerateFailureResponse(ex.Message));
             }
         }
     }

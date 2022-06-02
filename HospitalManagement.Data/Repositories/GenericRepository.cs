@@ -47,5 +47,11 @@ namespace HospitalManagement.Data.Repositories
         {
             return await _dbSet.Where(entity => entity.Id == id && entity.Status == 1).FirstOrDefaultAsync();
         }
+
+        public async Task<T> UpdateAsync(T entity)
+        {
+            _dbSet.Update(entity);
+            return (await _context.SaveChangesAsync()) > 0 ? entity : null;
+        }
     }
 }

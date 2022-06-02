@@ -109,5 +109,23 @@ namespace HospitalManagement.Api.Controllers
                 return BadRequest(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse(ex.Message));
             }
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<DrugRequestDto>>> SearchForDrugByNameOrDescription(string name=null, string description=null, int page = 1, int size = 50)
+        {
+            try
+            {
+                var drugs = await _unitOfWork.Drugs.SearchForDrugByNameOrDescription(name, description, page, size);
+
+                if(drugs == null)
+                {
+                    return NotFound(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateFailureResponse("Unable to find drug"));
+                }
+                return Ok(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateSuccessResponse(_mapper.Map<IEnumerable<DrugRequestDto>>(drugs)));
+            } catch(Exception ex)
+            {
+                return BadRequest(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateFailureResponse(ex.Message));
+            }
+        }
     }
 }

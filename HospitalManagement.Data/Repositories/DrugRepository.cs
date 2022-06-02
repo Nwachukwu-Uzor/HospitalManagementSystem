@@ -47,12 +47,12 @@ namespace HospitalManagement.Data.Repositories
         {
             var drugs = _dbSet.Where(drg => drg.Status == 1).AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(name.Trim()))
+            if (!string.IsNullOrWhiteSpace(name))
             {
                 drugs = drugs.Where(drg => drg.Name.ToLower().Contains(name.ToLower()));
             }
 
-            if (!string.IsNullOrEmpty(description.Trim()))
+            if (!string.IsNullOrEmpty(description))
             {
                 drugs = drugs.Where(drg => drg.Description.ToLower().Contains(description.ToLower()));
             }

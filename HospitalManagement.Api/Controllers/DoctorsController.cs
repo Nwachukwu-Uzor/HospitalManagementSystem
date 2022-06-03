@@ -2,12 +2,10 @@
 using HospitalManagement.Api.Dtos.Requests;
 using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Api.Response;
+using HospitalManagement.Commons.Contracts;
 using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
-using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -37,8 +35,6 @@ namespace HospitalManagement.Api.Controllers
                 var doctorAccountEntity = _mapper.Map<AppUser>(registrationDto);
                 var doctorAccountCreated = await _accountService.CreateUserAccountAsync(doctorAccountEntity, registrationDto.Password);
                 var userEntity = _mapper.Map<Doctor>(registrationDto);
-                userEntity.UserId = Guid.Parse(doctorAccountCreated.Id);
-                userEntity.User = doctorAccountCreated;
                 var entityCreated = await _unitOfWork.Doctors.AddAsync(userEntity);
                 if (entityCreated == null)
                 {
@@ -50,9 +46,9 @@ namespace HospitalManagement.Api.Controllers
 
                 var emailToSend = _emailService.CreateAccountRegistrationMail(
                     entityCreated.IdentificationNumber, 
-                    entityCreated.User.Email,
-                    entityCreated.User.FirstName,
-                    entityCreated.User.LastName,
+                    entityCreated.Email,
+                    entityCreated.FirstName,
+                    entityCreated.LastName,
                     "Doctor"
                 );
 
@@ -92,7 +88,7 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var doctor = await _unitOfWork.Doctors.GetDoctorByIdentityNumber(doctorIdentityNumber);
+                var doctor = await _unitOfWork.Doctors.GetUserByIdentityNumber(doctorIdentityNumber);
 
                 return Ok(
                     GenerateApiResponse<DoctorRequestDto>

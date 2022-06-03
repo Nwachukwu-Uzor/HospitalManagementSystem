@@ -4,6 +4,7 @@ using HospitalManagement.Api.Dtos.Requests;
 using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Api.Response;
 using HospitalManagement.Commons.Contracts;
+using HospitalManagement.Commons.Models;
 using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
@@ -43,7 +44,7 @@ namespace HospitalManagement.Api.Controllers
                     );
                 }
 
-                var patient = await _unitOfWork.Patients.GetPatientByIdentityNumber(appointmentCreationDto.PatientIdentityNumber);
+                var patient = await _unitOfWork.Patients.GetUserByIdentityNumber(appointmentCreationDto.PatientIdentityNumber);
 
                 if (patient == null)
                 {
@@ -53,7 +54,7 @@ namespace HospitalManagement.Api.Controllers
                     );
                 }
 
-                var doctor = await _unitOfWork.Doctors.GetDoctorByIdentityNumber(appointmentCreationDto.DoctorIdentityNumber);
+                var doctor = await _unitOfWork.Doctors.GetUserByIdentityNumber(appointmentCreationDto.DoctorIdentityNumber);
 
                 if (doctor == null)
                 {
@@ -69,18 +70,18 @@ namespace HospitalManagement.Api.Controllers
 
                 var appointmentAdded = await _unitOfWork.Appointments.AddAsync(appointment);
 
-                var doctorName = $"{doctor.User.FirstName} {doctor.User.LastName}";
+                var doctorName = $"{doctor.FirstName} {doctor.LastName}";
 
                 var appointmentDate = appointmentAdded.AppointmentDate.ToShortDateString();
                 var alertDate = $"Tomorrow at {appointmentAdded.AppointmentDate.TimeOfDay}";
 
                 // var emailToSend = _emailService.GenerateAppointmentEmail(patient.Email, doctorName, doctor.IdentificationNumber, appointmentDate);
-                var alertEmail = _emailService.GenerateAppointmentEmail(patient.User.Email, doctorName, doctor.IdentificationNumber, alertDate);
+                var alertEmail = _emailService.GenerateAppointmentEmail(patient.Email, doctorName, doctor.IdentificationNumber, alertDate);
 
                 var alertTime = _dateTimeValidator.GenerateAlertDate(appointmentAdded.AppointmentDate);
 
 
-                var smsToSend = new SMS() { Body = $"Dear {patient.User.FirstName}, you have an appointment on {appointmentDate}" };
+                var smsToSend = new SMS() { Body = $"Dear {patient.FirstName}, you have an appointment on {appointmentDate}" };
 
                 var jobId = BackgroundJob.Schedule(() => _emailService.SendMail(alertEmail), alertTime);
                 // var isEmailSent = await _emailService.SendMail(emailToSend);

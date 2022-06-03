@@ -1,7 +1,6 @@
 ﻿using HospitalManagement.Commons.Contracts;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
-using HospitalManagement.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -49,7 +48,7 @@ namespace HospitalManagement.Data.Repositories
             if (appointments.Count() >= _maxDailyAppointments)
             {
                 throw new ArgumentException(
-                    $"Dr. {appointment.Doctor.User.FirstName} {appointment.Doctor.User.LastName} already has to {_maxDailyAppointments} appointments"
+                    $"Dr. {appointment.Doctor.FirstName} {appointment.Doctor.LastName} already has to {_maxDailyAppointments} appointments"
                 );
             }
 
@@ -62,8 +61,8 @@ namespace HospitalManagement.Data.Repositories
         public async override Task<IEnumerable<Appointment>> GetAllPaginatedAsync(int pageNumber, int pageSize)
         {
             return await _dbSet.Where(appoint => appoint.Status == 1).Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                                .Include(app => app.Doctor.User)
-                                .Include(app => app.Patient.User)
+                                .Include(app => app.Doctor)
+                                .Include(app => app.Patient)
                                 .OrderBy(app => app.CreatedAt).ToListAsync(); ;
         }
 
@@ -76,8 +75,8 @@ namespace HospitalManagement.Data.Repositories
             )
             .AsNoTracking()
             .OrderByDescending(app => app.CreatedAt)
-            .Include(app => app.Doctor.User)
-            .Include(app => app.Patient.User)
+            .Include(app => app.Doctor)
+            .Include(app => app.Patient)
             .Skip((pageNumber -1) * pageSize)
             .Take(pageSize)
             .OrderByDescending(appointment => appointment.CreatedAt)
@@ -99,8 +98,8 @@ namespace HospitalManagement.Data.Repositories
                 app.Status == 1
             )
             .AsNoTracking()
-            .Include(app => app.Doctor.User)
-            .Include(app => app.Patient.User)
+            .Include(app => app.Doctor)
+            .Include(app => app.Patient)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .OrderByDescending(app => app.CreatedAt)
@@ -156,8 +155,8 @@ namespace HospitalManagement.Data.Repositories
                 &&
                 app.AppointmentDate.Year == DateTime.UtcNow.Year
             )
-            .Include(app => app.Doctor.User)
-            .Include(app => app.Patient.User)
+            .Include(app => app.Doctor)
+            .Include(app => app.Patient)
             .OrderBy(app => app.AppointmentDate).ToListAsync();
         }
 

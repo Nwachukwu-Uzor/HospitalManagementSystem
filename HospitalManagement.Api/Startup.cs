@@ -1,10 +1,9 @@
 using Hangfire;
 using HospitalManagement.Commons;
 using HospitalManagement.Commons.Contracts;
+using HospitalManagement.Commons.Models;
 using HospitalManagement.Data;
 using HospitalManagement.Data.Entities;
-using HospitalManagement.Services;
-using HospitalManagement.Services.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -51,9 +50,6 @@ namespace HospitalManagement.Api
             services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("SqlServer")));
 
             services.AddHangfireServer();
-
-
-            services.AddServiceLayerServices();
 
             // calling in SendGrid Configurations
             services.Configure<SendGridApi>(Configuration.GetSection("SendGrid"));

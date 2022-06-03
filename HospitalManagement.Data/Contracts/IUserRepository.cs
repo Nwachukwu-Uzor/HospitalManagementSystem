@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement.Data.Contracts
 {
-    public interface IDoctorsRepository : IUserRepository<Doctor>
+    public interface IUserRepository<T> : IGenericRepository<T> where T : AppUser
     {
+        public Task<T> GetUserByIdentityNumber(string identityNumber);
+        public Task<T> GetUserByEmail(string email);
     }
 }

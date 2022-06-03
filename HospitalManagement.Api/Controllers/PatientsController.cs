@@ -2,17 +2,13 @@
 using HospitalManagement.Api.Dtos.Requests;
 using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Api.Response;
+using HospitalManagement.Commons.Contracts;
 using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
-using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace HospitalManagement.Api.Controllers
@@ -31,8 +27,6 @@ namespace HospitalManagement.Api.Controllers
                 var patientIdentityEntity = _mapper.Map<AppUser>(patientRegistrationDto);
                 var patientAccountCreated = await _accountService.CreateUserAccountAsync(patientIdentityEntity, patientRegistrationDto.Password);
                 var patientEntity = _mapper.Map<Patient>(patientRegistrationDto);
-                patientEntity.UserId = new Guid(patientIdentityEntity.Id);
-                patientEntity.User = patientAccountCreated;
 
                 var patientCreated = await _unitOfWork.Patients.AddAsync(patientEntity);
 
@@ -43,9 +37,9 @@ namespace HospitalManagement.Api.Controllers
 
                 var emailToSend = _emailService.CreateAccountRegistrationMail(
                    patientCreated.IdentificationNumber,
-                   patientCreated.User.Email,
-                   patientCreated.User.FirstName,
-                   patientCreated.User.LastName,
+                   patientCreated.Email,
+                   patientCreated.FirstName,
+                   patientCreated.LastName,
                    "Patient"
                );
 
@@ -96,7 +90,7 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var patient = await _unitOfWork.Patients.GetPatientByIdentityNumber(patientIdentificationNumber);
+                var patient = await _unitOfWork.Patients.GetUserByIdentityNumber(patientIdentificationNumber);
 
                 if (patient == null)
                 {

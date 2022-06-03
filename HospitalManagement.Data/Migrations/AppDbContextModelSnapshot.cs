@@ -34,6 +34,13 @@ namespace HospitalManagement.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -43,6 +50,12 @@ namespace HospitalManagement.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentificationNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -55,6 +68,9 @@ namespace HospitalManagement.Data.Migrations
 
                     b.Property<string>("MiddleName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -97,6 +113,8 @@ namespace HospitalManagement.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AppUser");
                 });
 
             modelBuilder.Entity("HospitalManagement.Data.Entities.Appointment", b =>
@@ -117,11 +135,17 @@ namespace HospitalManagement.Data.Migrations
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("DoctorId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PatientId1")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ReferenceNumber")
                         .HasColumnType("nvarchar(max)");
@@ -131,42 +155,11 @@ namespace HospitalManagement.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorId");
+                    b.HasIndex("DoctorId1");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("PatientId1");
 
                     b.ToTable("Appointments");
-                });
-
-            modelBuilder.Entity("HospitalManagement.Data.Entities.Doctor", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IdentificationNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("Doctors");
                 });
 
             modelBuilder.Entity("HospitalManagement.Data.Entities.Drug", b =>
@@ -202,37 +195,6 @@ namespace HospitalManagement.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Drugs");
-                });
-
-            modelBuilder.Entity("HospitalManagement.Data.Entities.Patient", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IdentificationNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -370,41 +332,33 @@ namespace HospitalManagement.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("HospitalManagement.Data.Entities.Appointment", b =>
-                {
-                    b.HasOne("HospitalManagement.Data.Entities.Doctor", "Doctor")
-                        .WithMany()
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HospitalManagement.Data.Entities.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-
-                    b.Navigation("Patient");
-                });
-
             modelBuilder.Entity("HospitalManagement.Data.Entities.Doctor", b =>
                 {
-                    b.HasOne("HospitalManagement.Data.Entities.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
+                    b.HasBaseType("HospitalManagement.Data.Entities.AppUser");
 
-                    b.Navigation("User");
+                    b.HasDiscriminator().HasValue("Doctor");
                 });
 
             modelBuilder.Entity("HospitalManagement.Data.Entities.Patient", b =>
                 {
-                    b.HasOne("HospitalManagement.Data.Entities.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
+                    b.HasBaseType("HospitalManagement.Data.Entities.AppUser");
 
-                    b.Navigation("User");
+                    b.HasDiscriminator().HasValue("Patient");
+                });
+
+            modelBuilder.Entity("HospitalManagement.Data.Entities.Appointment", b =>
+                {
+                    b.HasOne("HospitalManagement.Data.Entities.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId1");
+
+                    b.HasOne("HospitalManagement.Data.Entities.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId1");
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

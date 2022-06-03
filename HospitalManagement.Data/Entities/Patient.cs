@@ -2,6 +2,6 @@
 
 namespace HospitalManagement.Data.Entities
 {
-    public class Patient : BaseUser
+    public class Patient : AppUser
     { }
 }

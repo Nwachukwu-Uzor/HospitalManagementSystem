@@ -49,12 +49,12 @@ namespace HospitalManagement.Data.Repositories
 
             if (!string.IsNullOrWhiteSpace(name))
             {
-                drugs = drugs.Where(drg => drg.Name.ToLower().Contains(name.ToLower()));
+                drugs = drugs.Where(drg => drg.Name.ToLower().Contains(name.Trim().ToLower()));
             }
 
             if (!string.IsNullOrEmpty(description))
             {
-                drugs = drugs.Where(drg => drg.Description.ToLower().Contains(description.ToLower()));
+                drugs = drugs.Where(drg => drg.Description.ToLower().Contains(description.Trim().ToLower()));
             }
 
             return await drugs.OrderBy(drg => drg.Name).Skip((page - 1) * size).Take(size).ToListAsync();

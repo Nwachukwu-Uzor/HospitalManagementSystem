@@ -1,4 +1,4 @@
-﻿namespace HospitalManagement.Services.Models
+﻿namespace HospitalManagement.Commons.Models
 {
     public class SendGridApi
     {

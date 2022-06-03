@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using HospitalManagement.Commons.Contracts;
 using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
-using HospitalManagement.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManagement.Api.Controllers

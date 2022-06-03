@@ -1,16 +1,11 @@
-﻿using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Models;
+﻿using HospitalManagement.Commons.Contracts;
+using HospitalManagement.Commons.Models;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
 
-namespace HospitalManagement.Services
+namespace HospitalManagement.Commons
 {
     public class SmsService : ISmsService
     {

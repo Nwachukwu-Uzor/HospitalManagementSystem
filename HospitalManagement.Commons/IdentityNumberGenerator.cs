@@ -1,8 +1,8 @@
-﻿using HospitalManagement.Services.Contracts;
+﻿using HospitalManagement.Commons.Contracts;
 using System;
 using System.Linq;
 
-namespace HospitalManagement.Services
+namespace HospitalManagement.Commons
 {
     public class IdentityNumberGenerator : IIdentityNumberGenerator
     {

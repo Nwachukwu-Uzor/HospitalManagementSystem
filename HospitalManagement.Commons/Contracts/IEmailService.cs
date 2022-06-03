@@ -1,7 +1,7 @@
-﻿using HospitalManagement.Services.Models;
+﻿using HospitalManagement.Commons.Models;
 using System.Threading.Tasks;
 
-namespace HospitalManagement.Services.Contracts
+namespace HospitalManagement.Commons.Contracts
 {
     public interface IEmailService
     {

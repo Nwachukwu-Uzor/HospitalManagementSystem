@@ -14,3 +14,4 @@ namespace HospitalManagement.Data.Entities
         public int Status { get; set; } = 1;
     }
 }
+ 

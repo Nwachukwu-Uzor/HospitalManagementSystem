@@ -1,12 +1,12 @@
-﻿using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Models;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using Microsoft.Extensions.Options;
+using HospitalManagement.Commons.Contracts;
+using HospitalManagement.Commons.Models;
 
-namespace HospitalManagement.Services
+namespace HospitalManagement.Commons
 {
     public class EmailService : IEmailService
     {

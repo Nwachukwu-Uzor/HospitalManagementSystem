@@ -7,8 +7,6 @@ using HospitalManagement.Commons.Contracts;
 using HospitalManagement.Data;
 using HospitalManagement.Data.Contracts;
 using HospitalManagement.Data.Entities;
-using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

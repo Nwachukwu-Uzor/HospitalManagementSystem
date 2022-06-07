@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManagement.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220603162331_initialMigration")]
+    [Migration("20220607192656_initialMigration")]
     partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace HospitalManagement.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
-            modelBuilder.Entity("HospitalManagement.Data.Entities.AppUser", b =>
+            modelBuilder.Entity("HospitalManagement.Domain.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -119,7 +119,7 @@ namespace HospitalManagement.Data.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("AppUser");
                 });
 
-            modelBuilder.Entity("HospitalManagement.Data.Entities.Appointment", b =>
+            modelBuilder.Entity("HospitalManagement.Domain.Models.Appointment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -164,7 +164,7 @@ namespace HospitalManagement.Data.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("HospitalManagement.Data.Entities.Drug", b =>
+            modelBuilder.Entity("HospitalManagement.Domain.Models.Drug", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -334,27 +334,33 @@ namespace HospitalManagement.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("HospitalManagement.Data.Entities.Doctor", b =>
+            modelBuilder.Entity("HospitalManagement.Domain.Models.Doctor", b =>
                 {
-                    b.HasBaseType("HospitalManagement.Data.Entities.AppUser");
+                    b.HasBaseType("HospitalManagement.Domain.Models.AppUser");
 
                     b.HasDiscriminator().HasValue("Doctor");
                 });
 
-            modelBuilder.Entity("HospitalManagement.Data.Entities.Patient", b =>
+            modelBuilder.Entity("HospitalManagement.Domain.Models.Patient", b =>
                 {
-                    b.HasBaseType("HospitalManagement.Data.Entities.AppUser");
+                    b.HasBaseType("HospitalManagement.Domain.Models.AppUser");
+
+                    b.Property<string>("BloodGroup")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Genotype")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Patient");
                 });
 
-            modelBuilder.Entity("HospitalManagement.Data.Entities.Appointment", b =>
+            modelBuilder.Entity("HospitalManagement.Domain.Models.Appointment", b =>
                 {
-                    b.HasOne("HospitalManagement.Data.Entities.Doctor", "Doctor")
+                    b.HasOne("HospitalManagement.Domain.Models.Doctor", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId1");
 
-                    b.HasOne("HospitalManagement.Data.Entities.Patient", "Patient")
+                    b.HasOne("HospitalManagement.Domain.Models.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId1");
 
@@ -374,7 +380,7 @@ namespace HospitalManagement.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("HospitalManagement.Data.Entities.AppUser", null)
+                    b.HasOne("HospitalManagement.Domain.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -383,7 +389,7 @@ namespace HospitalManagement.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("HospitalManagement.Data.Entities.AppUser", null)
+                    b.HasOne("HospitalManagement.Domain.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -398,7 +404,7 @@ namespace HospitalManagement.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HospitalManagement.Data.Entities.AppUser", null)
+                    b.HasOne("HospitalManagement.Domain.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -407,7 +413,7 @@ namespace HospitalManagement.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("HospitalManagement.Data.Entities.AppUser", null)
+                    b.HasOne("HospitalManagement.Domain.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

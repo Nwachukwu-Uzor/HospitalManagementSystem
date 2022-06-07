@@ -12,7 +12,7 @@ namespace HospitalManagement.Data
 
         public AccountService(UserManager<AppUser> userManager)
         {
-            _userManager = userManager;
+            _userManager = userManager ?? throw new ArgumentException(nameof(_userManager));
         }
 
         public async Task<AppUser> CreateUserAccountAsync(AppUser user, string password)

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using HospitalManagement.Api.Dtos.Requests;
-using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Api.Response;
 using HospitalManagement.BL.Contracts;
 using HospitalManagement.Data;
 using HospitalManagement.Domain.Contracts;
-using HospitalManagement.Domain.Models;
+using HospitalManagement.Services.Contracts;
+using HospitalManagement.Services.Dtos.Incoming.Patients;
+using HospitalManagement.Services.Dtos.Outgoing.Patients;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,53 +15,24 @@ namespace HospitalManagement.Api.Controllers
 {
     public class PatientsController : BaseController
     {
-        public PatientsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService)
+        private readonly IPatientsService _patientsService;
+        public PatientsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService, IPatientsService patientsService)
         : base(unitOfWork, mapper, accountService, emailService, smsService)
-        { }
+        {
+            _patientsService = patientsService;
+        }
 
         [HttpPost]
-        public async Task<ActionResult<PatientRequestDto>> CreatePatientAsync(PatientRegistrationDto patientRegistrationDto)
+        public async Task<ActionResult<PatientRequestDto>> CreatePatientAsync(PatientCreationDto patientRegistrationDto)
         {
             try
             {
-                var patientIdentityEntity = _mapper.Map<AppUser>(patientRegistrationDto);
-                var patientAccountCreated = await _accountService.CreateUserAccountAsync(patientIdentityEntity, patientRegistrationDto.Password);
-                var patientEntity = _mapper.Map<Patient>(patientRegistrationDto);
-
-                var patientCreated = await _unitOfWork.Patients.AddAsync(patientEntity);
-
-                if (patientCreated == null)
-                {
-                    return BadRequest(GenerateApiResponse<AppointmentRequestDto>.GenerateFailureResponse("Unable to create patient with the data provided"));
-                }
-
-                var emailToSend = _emailService.CreateAccountRegistrationMail(
-                   patientCreated.IdentificationNumber,
-                   patientCreated.Email,
-                   patientCreated.FirstName,
-                   patientCreated.LastName,
-                   "Patient"
-               );
-
-
-                var isEmailSent = await _emailService.SendMail(emailToSend);
-                //var smsToSend = new SMS() { Body = $"Dear {patientRegistrationDto.FirstName}, " +
-                    //$"your account has been created with the {patientCreated.IdentificationNumber}", 
-                    //To = patientRegistrationDto.PhoneNumber 
-                //};
-               // var resp = _smsService.SendSms(smsToSend);
-
-               // if (!isEmailSent)
-               // {
-               //     return BadRequest("Unable to send email");
-               // }
-
-
+                var patientCreated = await _patientsService.CreatePatientAsync(patientRegistrationDto);
 
                 return CreatedAtRoute(
                     nameof(GetPatientByIdentityNumberAsync), 
                     new { patientIdentificationNumber = patientCreated.IdentificationNumber }, 
-                     GenerateApiResponse<PatientRequestDto>.GenerateSuccessResponse(_mapper.Map<PatientRequestDto>(patientCreated))
+                     GenerateApiResponse<PatientRequestDto>.GenerateSuccessResponse(patientCreated)
                 );
 
             } catch(Exception ex)
@@ -75,10 +46,10 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var patients = await _unitOfWork.Patients.GetAllPaginatedAsync(page, pageSize);
+                var patients = await _patientsService.GetAllPatients(page, pageSize);
                 
 
-                return Ok(GenerateApiResponse<IEnumerable<PatientRequestDto>>.GenerateSuccessResponse(_mapper.Map<IEnumerable<PatientRequestDto>>(patients)));
+                return Ok(GenerateApiResponse<IEnumerable<PatientRequestDto>>.GenerateSuccessResponse(patients));
             } catch (Exception ex)
             {
                 return BadRequest(GenerateApiResponse<IEnumerable<PatientRequestDto>>.GenerateFailureResponse(ex.Message));
@@ -90,14 +61,9 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var patient = await _unitOfWork.Patients.GetUserByIdentityNumber(patientIdentificationNumber);
+                var patient = await _patientsService.GetPatientByIdentityNumberAsync(patientIdentificationNumber);
 
-                if (patient == null)
-                {
-                    return NotFound(GenerateApiResponse<PatientRequestDto>.GenerateFailureResponse("No patient with the specified identity number, please supply a valid identity number"));
-                }
-
-                return Ok(GenerateApiResponse<PatientRequestDto>.GenerateSuccessResponse(_mapper.Map<PatientRequestDto>(patient)));
+                return Ok(GenerateApiResponse<PatientRequestDto>.GenerateSuccessResponse(patient));
             } catch(Exception ex)
             {
                 return BadRequest(GenerateApiResponse<PatientRequestDto>.GenerateFailureResponse(ex.Message));

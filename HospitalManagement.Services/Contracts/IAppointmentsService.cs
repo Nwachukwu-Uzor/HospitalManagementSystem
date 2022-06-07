@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement.Services.Contracts
 {
-    public interface IAppointmentService
+    public interface IAppointmentsService
     {
         Task<AppointmentRequestDto> CreateAppointment(AppointmentCreationDto appointmentCreationDto);
         Task<IEnumerable<AppointmentRequestDto>> GetAllAppointmentsAsync(int page = 1, int pageSize = 50);

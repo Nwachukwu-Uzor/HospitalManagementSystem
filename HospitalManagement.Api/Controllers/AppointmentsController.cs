@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Hangfire;
-using HospitalManagement.Api.Dtos.Requests;
-using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Api.Response;
 using HospitalManagement.BL.Contracts;
 using HospitalManagement.BL.Models;
 using HospitalManagement.Data;
 using HospitalManagement.Domain.Contracts;
 using HospitalManagement.Domain.Models;
+using HospitalManagement.Services.Contracts;
+using HospitalManagement.Services.Dtos.Incoming.Appointment;
+using HospitalManagement.Services.Dtos.Outgoing.Appointment;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,17 +18,17 @@ namespace HospitalManagement.Api.Controllers
 {
     public class AppointmentsController : BaseController
     {
-        private readonly IDateTimeValidator _dateTimeValidator;
+        private readonly IAppointmentsService _appointmentsService;
         public AppointmentsController(
-            IUnitOfWork unitOfWork, IMapper mapper, 
-            IAccountService accountService, 
-            IEmailService emailService, 
+            IUnitOfWork unitOfWork, IMapper mapper,
+            IAccountService accountService,
+            IEmailService emailService,
             ISmsService smsService,
-            IDateTimeValidator dateTimeValidator
-        )
-            : base (unitOfWork, mapper, accountService, emailService, smsService)
+            IDateTimeValidator dateTimeValidator,
+            IAppointmentsService appointmentsService)
+            : base(unitOfWork, mapper, accountService, emailService, smsService)
         {
-            _dateTimeValidator = dateTimeValidator;
+            _appointmentsService = appointmentsService;
         }
 
         [HttpPost]
@@ -44,52 +45,13 @@ namespace HospitalManagement.Api.Controllers
                     );
                 }
 
-                var patient = await _unitOfWork.Patients.GetUserByIdentityNumber(appointmentCreationDto.PatientIdentityNumber);
+                var appointmentAdded = await _appointmentsService.CreateAppointment(appointmentCreationDto);
 
-                if (patient == null)
-                {
-                    return BadRequest(
-                        GenerateApiResponse<AppointmentRequestDto>
-                        .GenerateFailureResponse("The patient identification number provided is invalid")
-                    );
-                }
-
-                var doctor = await _unitOfWork.Doctors.GetUserByIdentityNumber(appointmentCreationDto.DoctorIdentityNumber);
-
-                if (doctor == null)
-                {
-                    return BadRequest(GenerateApiResponse<AppointmentRequestDto>
-                        .GenerateFailureResponse("The doctor identification number provided is invalid")
-                    );
-                }
-
-                var appointment = _mapper.Map<Appointment>(appointmentCreationDto);
-
-                appointment.Doctor = doctor;
-                appointment.Patient = patient;
-
-                var appointmentAdded = await _unitOfWork.Appointments.AddAsync(appointment);
-
-                var doctorName = $"{doctor.FirstName} {doctor.LastName}";
-
-                var appointmentDate = appointmentAdded.AppointmentDate.ToShortDateString();
-                var alertDate = $"Tomorrow at {appointmentAdded.AppointmentDate.TimeOfDay}";
-
-                // var emailToSend = _emailService.GenerateAppointmentEmail(patient.Email, doctorName, doctor.IdentificationNumber, appointmentDate);
-                var alertEmail = _emailService.GenerateAppointmentEmail(patient.Email, doctorName, doctor.IdentificationNumber, alertDate);
-
-                var alertTime = _dateTimeValidator.GenerateAlertDate(appointmentAdded.AppointmentDate);
-
-
-                var smsToSend = new SMS() { Body = $"Dear {patient.FirstName}, you have an appointment on {appointmentDate}" };
-
-                var jobId = BackgroundJob.Schedule(() => _emailService.SendMail(alertEmail), alertTime);
-                // var isEmailSent = await _emailService.SendMail(emailToSend);
                 return CreatedAtRoute(
                     nameof(GetAppointmentById), 
                     new { appointmentId = appointmentAdded.Id },
                      GenerateApiResponse<AppointmentRequestDto>
-                        .GenerateSuccessResponse(_mapper.Map<AppointmentRequestDto>(appointmentAdded))
+                        .GenerateSuccessResponse(appointmentAdded)
                 );
             } catch(Exception ex)
             {
@@ -105,11 +67,10 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var appointments = await _unitOfWork.Appointments.GetAllPaginatedAsync(page, pageSize);
-                Response.Headers.Add("page", page.ToString());
+                var appointments = await _appointmentsService.GetAllAppointmentsAsync(page, pageSize);
                 return Ok(
                     GenerateApiResponse<IEnumerable<AppointmentRequestDto>>
-                        .GenerateSuccessResponse(_mapper.Map<IEnumerable<AppointmentRequestDto>>(appointments))
+                        .GenerateSuccessResponse(appointments)
                 );
             } catch(Exception ex)
             {
@@ -125,19 +86,11 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var appointment = await _unitOfWork.Appointments.GetByIdAsync(appointmentId);
-
-                if (appointment == null)
-                {
-                    return NotFound(
-                        GenerateApiResponse<AppointmentRequestDto>
-                            .GenerateFailureResponse("Unable to get an appointment with the id supplied")
-                    );
-                }
+                var appointment = await _appointmentsService.GetAppointmentById(appointmentId);
 
                 return Ok(
                     GenerateApiResponse<AppointmentRequestDto>
-                        .GenerateSuccessResponse(_mapper.Map<AppointmentRequestDto>(appointment))
+                        .GenerateSuccessResponse(appointment)
                 );
             } catch(Exception ex)
             {

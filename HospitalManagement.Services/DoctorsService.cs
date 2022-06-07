@@ -17,15 +17,13 @@ namespace HospitalManagement.Services
     public class DoctorsService : IDoctorsService
     {
         private readonly IMapper _mapper;
-        private readonly IIdentityNumberGenerator _identityNumberGenerator;
         private readonly IEmailService _emailService;
         private readonly IUnitOfWork _unitOfWork;
         protected readonly IAccountService _accountService;
 
-        public DoctorsService(IMapper mapper, IIdentityNumberGenerator identityNumberGenerator, IEmailService emailService, IUnitOfWork unitOfWork)
+        public DoctorsService(IMapper mapper, IEmailService emailService, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
-            _identityNumberGenerator = identityNumberGenerator;
             _emailService = emailService;
             _unitOfWork = unitOfWork;
         }
@@ -34,6 +32,7 @@ namespace HospitalManagement.Services
             try
             {
                 var doctorAccountEntity = _mapper.Map<AppUser>(registrationDto);
+
                 var doctorAccountCreated = await _accountService.CreateUserAccountAsync(doctorAccountEntity, registrationDto.Password);
                 var userEntity = _mapper.Map<Doctor>(registrationDto);
                 var entityCreated = await _unitOfWork.Doctors.AddAsync(userEntity);
@@ -59,14 +58,22 @@ namespace HospitalManagement.Services
             }
         }
 
-        public Task<IEnumerable<DoctorRequestDto>> GetAllDoctorsAsync(int pageNumber = 1, int pageSize = 50)
+        public async Task<IEnumerable<DoctorRequestDto>> GetAllDoctorsAsync(int pageNumber = 1, int pageSize = 50)
         {
-            throw new NotImplementedException();
+            var doctors = await _unitOfWork.Doctors.GetAllPaginatedAsync(pageNumber, pageSize);
+            return _mapper.Map<IEnumerable<DoctorRequestDto>>(doctors);
         }
 
-        public Task<DoctorRequestDto> GetDoctorByIdentityNumberAsync(string doctorIdentityNumber)
+        public async Task<DoctorRequestDto> GetDoctorByIdentityNumberAsync(string doctorIdentityNumber)
         {
-            throw new NotImplementedException();
+            var doctor = await _unitOfWork.Doctors.GetUserByIdentityNumber(doctorIdentityNumber);
+
+            if (doctor == null)
+            {
+                throw new ArgumentException("Invalid doctor identification number");
+            }
+
+            return _mapper.Map<DoctorRequestDto>(doctor);
         }
     }
 }

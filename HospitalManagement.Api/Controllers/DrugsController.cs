@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using HospitalManagement.Api.Dtos.Requests;
-using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Api.Response;
 using HospitalManagement.BL.Contracts;
 using HospitalManagement.Data;
 using HospitalManagement.Domain.Contracts;
 using HospitalManagement.Domain.Models;
+using HospitalManagement.Services.Dtos.Incoming.Drugs;
+using HospitalManagement.Services.Dtos.Outgoing.Drugs;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

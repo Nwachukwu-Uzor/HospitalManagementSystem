@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using HospitalManagement.Api.Dtos.Requests;
-using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Api.Response;
 using HospitalManagement.BL.Contracts;
 using HospitalManagement.Data;
 using HospitalManagement.Domain.Contracts;
-using HospitalManagement.Domain.Models;
+using HospitalManagement.Services.Contracts;
+using HospitalManagement.Services.Dtos.Incoming.Doctors;
+using HospitalManagement.Services.Dtos.Outgoing.Doctors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,14 +15,15 @@ namespace HospitalManagement.Api.Controllers
 {
     public class DoctorsController : BaseController
     {
-        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService)
+        private readonly IDoctorsService _doctorsService;
+        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService, IDoctorsService doctorsService)
         : base(unitOfWork, mapper, accountService, emailService, smsService)
         {
-            
+            _doctorsService = doctorsService;
         }
 
         [HttpPost]
-        public async Task<ActionResult<DoctorRequestDto>> CreateDoctorAsync(DoctorRegistrationDto registrationDto)
+        public async Task<ActionResult<DoctorRequestDto>> CreateDoctorAsync(DoctorCreationDto registrationDto)
         {
             if (!ModelState.IsValid)
             {
@@ -32,32 +33,12 @@ namespace HospitalManagement.Api.Controllers
             }
             try
             {
-                var doctorAccountEntity = _mapper.Map<AppUser>(registrationDto);
-                var doctorAccountCreated = await _accountService.CreateUserAccountAsync(doctorAccountEntity, registrationDto.Password);
-                var userEntity = _mapper.Map<Doctor>(registrationDto);
-                var entityCreated = await _unitOfWork.Doctors.AddAsync(userEntity);
-                if (entityCreated == null)
-                {
-                    return BadRequest(
-                        GenerateApiResponse<DoctorRequestDto>
-                            .GenerateFailureResponse("Unable to create doctor account with the data provided")
-                    );
-                }
-
-                var emailToSend = _emailService.CreateAccountRegistrationMail(
-                    entityCreated.IdentificationNumber, 
-                    entityCreated.Email,
-                    entityCreated.FirstName,
-                    entityCreated.LastName,
-                    "Doctor"
-                );
-
-                var isEmailSent = await _emailService.SendMail(emailToSend);
+                var doctor = await _doctorsService.CreateDoctorAsync(registrationDto);
 
                 return CreatedAtRoute(
                     nameof(GetDoctorByIdentityNumberAsync),
-                    new { doctorIdentityNumber = entityCreated.IdentificationNumber },
-                    GenerateApiResponse<DoctorRequestDto>.GenerateSuccessResponse(_mapper.Map<DoctorRequestDto>(entityCreated))
+                    new { doctorIdentityNumber = doctor.IdentificationNumber },
+                    GenerateApiResponse<DoctorRequestDto>.GenerateSuccessResponse(doctor)
                 );
             }
             catch (Exception ex)
@@ -71,10 +52,10 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var doctors = await _unitOfWork.Doctors.GetAllPaginatedAsync(pageNumber, pageSize);
+                var doctors = await _doctorsService.GetAllDoctorsAsync(pageNumber, pageSize);
                 return Ok(
                     GenerateApiResponse<IEnumerable<DoctorRequestDto>>
-                    .GenerateSuccessResponse(_mapper.Map<IEnumerable<DoctorRequestDto>>(doctors))
+                    .GenerateSuccessResponse(doctors)
                 );
             }
             catch (Exception ex)
@@ -88,11 +69,11 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var doctor = await _unitOfWork.Doctors.GetUserByIdentityNumber(doctorIdentityNumber);
+                var doctor = await _doctorsService.GetDoctorByIdentityNumberAsync(doctorIdentityNumber);
 
                 return Ok(
                     GenerateApiResponse<DoctorRequestDto>
-                        .GenerateSuccessResponse(_mapper.Map<DoctorRequestDto>(doctor))
+                        .GenerateSuccessResponse(doctor)
                 );
             } catch(Exception ex)
             {

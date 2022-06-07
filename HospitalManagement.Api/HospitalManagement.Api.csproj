@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HospitalManagement.Data\HospitalManagement.Data.csproj" />
+    <ProjectReference Include="..\HospitalManagement.Services\HospitalManagement.Services.csproj" />
   </ItemGroup>
 
 </Project>

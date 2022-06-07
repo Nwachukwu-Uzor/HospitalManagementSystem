@@ -4,6 +4,7 @@ namespace HospitalManagement.Services.Dtos.Outgoing.Appointment
 {
     public class AppointmentRequestDto
     {
+        public Guid Id { get; set; }
         public string PatientName { get; set; }
         public string DoctorName { get; set; }
         public DateTime AppointmentDate { get; set; }

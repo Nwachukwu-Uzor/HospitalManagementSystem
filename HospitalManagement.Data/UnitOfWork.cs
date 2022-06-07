@@ -1,4 +1,4 @@
-﻿using HospitalManagement.Data.Contracts;
+﻿using HospitalManagement.Domain.Contracts;
 
 namespace HospitalManagement.Data
 {

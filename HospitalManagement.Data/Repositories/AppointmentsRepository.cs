@@ -1,6 +1,6 @@
-﻿using HospitalManagement.Commons.Contracts;
-using HospitalManagement.Data.Contracts;
-using HospitalManagement.Data.Entities;
+﻿using HospitalManagement.BL.Contracts;
+using HospitalManagement.Domain.Contracts;
+using HospitalManagement.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

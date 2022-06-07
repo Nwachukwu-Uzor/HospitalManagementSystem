@@ -1,4 +1,4 @@
-﻿using HospitalManagement.Data.Entities;
+﻿using HospitalManagement.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

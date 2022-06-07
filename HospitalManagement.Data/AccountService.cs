@@ -1,4 +1,4 @@
-﻿using HospitalManagement.Data.Entities;
+﻿using HospitalManagement.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Text;
@@ -26,10 +26,10 @@ namespace HospitalManagement.Data
 
             var isCreated = await _userManager.CreateAsync(user, password);
 
-            if(!isCreated.Succeeded)
+            if (!isCreated.Succeeded)
             {
                 var errorMessage = new StringBuilder();
-                foreach(var error in isCreated.Errors)
+                foreach (var error in isCreated.Errors)
                 {
                     errorMessage.AppendLine($" {error.Description}");
                 }
@@ -56,6 +56,11 @@ namespace HospitalManagement.Data
             }
 
             return accountExists;
+        }
+
+        Task<AppUser> IAccountService.SignInUserAsync(string email, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

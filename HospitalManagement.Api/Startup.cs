@@ -1,9 +1,7 @@
 using Hangfire;
-using HospitalManagement.Commons;
-using HospitalManagement.Commons.Contracts;
-using HospitalManagement.Commons.Models;
+using HospitalManagement.BL.Models;
 using HospitalManagement.Data;
-using HospitalManagement.Data.Entities;
+using HospitalManagement.Domain.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -54,9 +52,6 @@ namespace HospitalManagement.Api
             // calling in SendGrid Configurations
             services.Configure<SendGridApi>(Configuration.GetSection("SendGrid"));
             services.Configure<TwilioApi>(Configuration.GetSection("Twilio"));
-
-            // add commons layers services
-            services.AddCommonsLayerServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -2,10 +2,10 @@
 using HospitalManagement.Api.Dtos.Requests;
 using HospitalManagement.Api.Dtos.Responses;
 using HospitalManagement.Api.Response;
-using HospitalManagement.Commons.Contracts;
+using HospitalManagement.BL.Contracts;
 using HospitalManagement.Data;
-using HospitalManagement.Data.Contracts;
-using HospitalManagement.Data.Entities;
+using HospitalManagement.Domain.Contracts;
+using HospitalManagement.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

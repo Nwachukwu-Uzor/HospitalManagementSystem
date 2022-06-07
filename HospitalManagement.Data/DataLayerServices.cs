@@ -1,14 +1,6 @@
-﻿using HospitalManagement.Data.Contracts;
-using HospitalManagement.Data.Repositories;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using HospitalManagement.Data.Repositories;
+using HospitalManagement.Domain.Contracts;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HospitalManagement.Data
 {

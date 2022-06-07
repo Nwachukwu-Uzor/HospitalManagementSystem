@@ -1,6 +1,7 @@
-﻿using HospitalManagement.Commons.Contracts;
-using HospitalManagement.Data.Contracts;
-using HospitalManagement.Data.Entities;
+﻿using HospitalManagement.BL.Contracts;
+using HospitalManagement.Domain.Contracts;
+using HospitalManagement.Domain.Models;
+
 namespace HospitalManagement.Data.Repositories
 {
     public class DoctorsRepository : BaseUserRepository<Doctor>, IDoctorsRepository

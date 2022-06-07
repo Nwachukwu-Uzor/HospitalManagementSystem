@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using HospitalManagement.BL.Contracts;
-using HospitalManagement.Data;
-using HospitalManagement.Domain.Contracts;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManagement.Api.Controllers
 {
@@ -10,24 +6,8 @@ namespace HospitalManagement.Api.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
-        protected readonly IUnitOfWork _unitOfWork;
-        protected readonly IMapper _mapper;
-        protected readonly IAccountService _accountService;
-        protected readonly IEmailService _emailService;
-        protected readonly ISmsService _smsService;
-
-        public BaseController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService)
+        public BaseController()
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _accountService = accountService;
-            _emailService = emailService;
-            _smsService = smsService;
         }
-
-        public IUnitOfWork UnitOfWork { get; }
-        public IMapper Mapper { get; }
-        public IAccountService AccountService { get; }
-        public IEmailService EmailService { get; }
     }
 }

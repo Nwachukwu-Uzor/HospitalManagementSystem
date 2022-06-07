@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using HospitalManagement.Api.Response;
-using HospitalManagement.BL.Contracts;
-using HospitalManagement.Data;
-using HospitalManagement.Domain.Contracts;
+﻿using HospitalManagement.Api.Response;
 using HospitalManagement.Services.Contracts;
 using HospitalManagement.Services.Dtos.Incoming.Doctors;
 using HospitalManagement.Services.Dtos.Outgoing.Doctors;
@@ -16,8 +12,7 @@ namespace HospitalManagement.Api.Controllers
     public class DoctorsController : BaseController
     {
         private readonly IDoctorsService _doctorsService;
-        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService, IDoctorsService doctorsService)
-        : base(unitOfWork, mapper, accountService, emailService, smsService)
+        public DoctorsController(IDoctorsService doctorsService) : base()
         {
             _doctorsService = doctorsService;
         }

@@ -127,9 +127,23 @@ namespace HospitalManagement.Services
          
         }
 
-        public Task<IEnumerable<AppointmentRequestDto>> GetAppointmentByPatientIdAsync(string patientIdentificationNumber, int pageSize = 10, int pageNumber = 1)
+        public async Task<IEnumerable<AppointmentRequestDto>> GetAppointmentByPatientIdAsync(string patientIdentificationNumber, int pageSize = 10, int pageNumber = 1)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var appointments = await _unitOfWork.Appointments.GetAppointmentsForDoctorAsync(patientIdentificationNumber, pageSize, pageNumber);
+
+                if (appointments == null)
+                {
+                    throw new ArgumentException("Unable to get an appointment with the id supplied");
+                }
+
+                return _mapper.Map<IEnumerable<AppointmentRequestDto>>(appointments);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
         }
     }
 }

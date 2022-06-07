@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Hangfire;
-using HospitalManagement.Api.Response;
-using HospitalManagement.BL.Contracts;
-using HospitalManagement.BL.Models;
-using HospitalManagement.Data;
-using HospitalManagement.Domain.Contracts;
-using HospitalManagement.Domain.Models;
+﻿using HospitalManagement.Api.Response;
 using HospitalManagement.Services.Contracts;
 using HospitalManagement.Services.Dtos.Incoming.Appointment;
 using HospitalManagement.Services.Dtos.Outgoing.Appointment;
@@ -19,14 +12,7 @@ namespace HospitalManagement.Api.Controllers
     public class AppointmentsController : BaseController
     {
         private readonly IAppointmentsService _appointmentsService;
-        public AppointmentsController(
-            IUnitOfWork unitOfWork, IMapper mapper,
-            IAccountService accountService,
-            IEmailService emailService,
-            ISmsService smsService,
-            IDateTimeValidator dateTimeValidator,
-            IAppointmentsService appointmentsService)
-            : base(unitOfWork, mapper, accountService, emailService, smsService)
+        public AppointmentsController(IAppointmentsService appointmentsService) : base()
         {
             _appointmentsService = appointmentsService;
         }
@@ -108,11 +94,11 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var appointments = await _unitOfWork.Appointments.GetAppointmentsForDoctorAsync(doctorIdentificationNumber, pageSize, pageNumber);
+                var appointments = await _appointmentsService.GetAppointmentByDoctorIdAsync(doctorIdentificationNumber, pageSize, pageNumber);
 
                 return Ok(
                     GenerateApiResponse<IEnumerable<AppointmentRequestDto>>
-                        .GenerateSuccessResponse(_mapper.Map<IEnumerable<AppointmentRequestDto>>(appointments))
+                        .GenerateSuccessResponse(appointments)
                     );
             } catch(Exception ex)
             {
@@ -130,11 +116,11 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var appointments = await _unitOfWork.Appointments.GetAppointmentsForPatientAsync(patientIdentificationNumber, pageSize, pageNumber);
+                var appointments = await _appointmentsService.GetAppointmentByDoctorIdAsync(patientIdentificationNumber, pageSize, pageNumber);
 
                 return Ok(
                     GenerateApiResponse<IEnumerable<AppointmentRequestDto>>
-                        .GenerateSuccessResponse(_mapper.Map<IEnumerable<AppointmentRequestDto>>(appointments))
+                        .GenerateSuccessResponse(appointments)
                     );
             } catch(Exception ex)
             {

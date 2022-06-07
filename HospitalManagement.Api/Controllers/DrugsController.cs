@@ -1,9 +1,5 @@
-﻿using AutoMapper;
-using HospitalManagement.Api.Response;
-using HospitalManagement.BL.Contracts;
-using HospitalManagement.Data;
-using HospitalManagement.Domain.Contracts;
-using HospitalManagement.Domain.Models;
+﻿using HospitalManagement.Api.Response;
+using HospitalManagement.Services.Contracts;
 using HospitalManagement.Services.Dtos.Incoming.Drugs;
 using HospitalManagement.Services.Dtos.Outgoing.Drugs;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +11,10 @@ namespace HospitalManagement.Api.Controllers
 {
     public class DrugsController : BaseController
     {
-        public DrugsController(IUnitOfWork unitOfWork, IMapper mapper, IAccountService accountService, IEmailService emailService, ISmsService smsService)
-        : base(unitOfWork, mapper, accountService, emailService, smsService)
+        private readonly IDrugsService _drugsService;
+        public DrugsController(IDrugsService drugsService) : base()
         {
-
+            _drugsService = drugsService;
         }
 
         [HttpPost]
@@ -31,14 +27,12 @@ namespace HospitalManagement.Api.Controllers
                     return BadRequest("Invalid drug creation model");
                 }
 
-                var drugEntity = _mapper.Map<Drug>(drugCreationDto);
-
-                var drug = await _unitOfWork.Drugs.AddAsync(drugEntity);
+                var drug = await _drugsService.CreateDrug(drugCreationDto);
 
                 return CreatedAtAction(
                     nameof(GetDrugByIdentityNumber),
                     new { identityNumber = drug.IdentificationNumber },
-                    GenerateApiResponse<DrugRequestDto>.GenerateSuccessResponse(_mapper.Map<DrugRequestDto>(drug))
+                    GenerateApiResponse<DrugRequestDto>.GenerateSuccessResponse(drug)
                 );
 
             } catch(Exception ex)
@@ -52,9 +46,9 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var drugs = await _unitOfWork.Drugs.GetAllPaginatedAsync(page, size);
+                var drugs = await _drugsService.GetAllDrugs(page, size);
 
-                return Ok(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateSuccessResponse(_mapper.Map<IEnumerable<DrugRequestDto>>(drugs)));
+                return Ok(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateSuccessResponse(drugs));
             } catch (Exception ex)
             {
                 return BadRequest(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateFailureResponse(ex.Message));
@@ -66,14 +60,9 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var drug = await _unitOfWork.Drugs.GetDrugByIdentityNumber(identityNumber);
+                var drug = await _drugsService.GetDrugByIdentityNumber(identityNumber);
 
-                if (drug == null)
-                {
-                    return NotFound(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse("No drug found with the identity number provided"));
-                }
-
-                return Ok(GenerateApiResponse<DrugRequestDto>.GenerateSuccessResponse(_mapper.Map<DrugRequestDto>(drug)));
+                return Ok(GenerateApiResponse<DrugRequestDto>.GenerateSuccessResponse(drug));
             } catch(Exception ex)
             {
                 return BadRequest(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse(ex.Message));
@@ -85,22 +74,9 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var drug = await _unitOfWork.Drugs.GetDrugByIdentityNumber(identityNumber);
+                var drug = await _drugsService.UpdateDrug(identityNumber, drugDto);
 
-                if (drug == null)
-                {
-                    return NotFound(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse("No drug found with the identity number provided"));
-                }
-                var updatedDrug = _mapper.Map(drugDto, drug);
-
-                var updatedDrugEntity = await _unitOfWork.Drugs.UpdateAsync(updatedDrug);
-
-                if(updatedDrugEntity == null)
-                {
-                    return BadRequest(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse("Unable to Update Drug"));
-                }
-
-                return Ok(GenerateApiResponse<DrugRequestDto>.GenerateSuccessResponse(_mapper.Map<DrugRequestDto>(updatedDrug)));
+                return Ok(GenerateApiResponse<DrugRequestDto>.GenerateSuccessResponse(drug));
             }
             catch (Exception ex)
             {
@@ -113,13 +89,9 @@ namespace HospitalManagement.Api.Controllers
         {
             try
             {
-                var drugs = await _unitOfWork.Drugs.SearchForDrugByNameOrDescription(name, description, page, size);
+                var drugs = await _drugsService.SearchForDrugByNameOrDescription(name, description, page, size);
 
-                if(drugs == null)
-                {
-                    return NotFound(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateFailureResponse("Unable to find drug"));
-                }
-                return Ok(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateSuccessResponse(_mapper.Map<IEnumerable<DrugRequestDto>>(drugs)));
+                return Ok(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateSuccessResponse(drugs));
             } catch(Exception ex)
             {
                 return BadRequest(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateFailureResponse(ex.Message));

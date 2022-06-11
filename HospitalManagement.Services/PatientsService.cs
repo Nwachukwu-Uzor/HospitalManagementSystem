@@ -29,11 +29,9 @@ namespace HospitalManagement.Services
         {
             try
             {
-                var patientIdentityEntity = _mapper.Map<AppUser>(patientRegistrationDto);
-                // var patientAccountCreated = await _accountService.CreateUserAccountAsync(patientIdentityEntity, patientRegistrationDto.Password);
                 var patientEntity = _mapper.Map<Patient>(patientRegistrationDto);
 
-                var patientCreated = await _unitOfWork.Patients.AddAsync(patientEntity);
+                var patientCreated = await _unitOfWork.Patients.CreateAsync(patientEntity, patientRegistrationDto.Password);
 
                 if (patientCreated == null)
                 {

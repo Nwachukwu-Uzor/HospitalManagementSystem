@@ -31,11 +31,8 @@ namespace HospitalManagement.Services
         {
             try
             {
-                var doctorAccountEntity = _mapper.Map<AppUser>(registrationDto);
-
-                var doctorAccountCreated = await _accountService.CreateUserAccountAsync(doctorAccountEntity, registrationDto.Password);
                 var userEntity = _mapper.Map<Doctor>(registrationDto);
-                var entityCreated = await _unitOfWork.Doctors.AddAsync(userEntity);
+                var entityCreated = await _unitOfWork.Doctors.CreateAsync(userEntity, registrationDto.Password);
                 if (entityCreated == null)
                 {
                     throw new ArgumentException("Unable to create doctor with the credential provided");

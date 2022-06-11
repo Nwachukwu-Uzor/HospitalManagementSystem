@@ -9,7 +9,9 @@ namespace HospitalManagement.Services.Profiles
     {
         public DoctorProfile()
         {
-                CreateMap<DoctorCreationDto, Doctor>();
+                CreateMap<DoctorCreationDto, Doctor>()
+                  .ForMember(dest => dest.EmailConfirmed, option => option.MapFrom(src => true))
+                    .ForMember(dest => dest.UserName, option => option.MapFrom(src => src.Email));
 
                 CreateMap<Doctor, DoctorRequestDto>();
 

@@ -1,6 +1,7 @@
 ﻿using HospitalManagement.BL.Contracts;
 using HospitalManagement.Domain.Contracts;
 using HospitalManagement.Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,14 @@ namespace HospitalManagement.Data.Repositories
         protected readonly DbSet<T> _dbSet;
         protected readonly AppDbContext _context;
         protected readonly IIdentityNumberGenerator _identityNumberGenerator;
-        public BaseUserRepository(AppDbContext context, IIdentityNumberGenerator identityNumberGenerator, string userType)
+        protected readonly UserManager<AppUser> _userManager;
+        public BaseUserRepository(AppDbContext context, IIdentityNumberGenerator identityNumberGenerator, string userType, UserManager<AppUser> userManager)
         {
             _dbSet = context.Set<T>();
             _context = context;
             _userType = userType;
             _identityNumberGenerator = identityNumberGenerator;
+            _userManager = userManager;
         }
         public virtual async Task<T> AddAsync(T entity)
         {
@@ -40,7 +43,7 @@ namespace HospitalManagement.Data.Repositories
 
             if (userByEmail != null)
             {
-                throw new ArgumentException("A doctor exists with the email provided");
+                throw new ArgumentException($"A {nameof(AppUser)} exists with the email provided");
             }
 
             entity.IdentificationNumber = randomId;
@@ -91,6 +94,43 @@ namespace HospitalManagement.Data.Repositories
         public virtual async Task<T> GetUserByEmail(string email)
         {
            return await _dbSet.Where(user => user.Email == email).FirstOrDefaultAsync();
+        }
+
+        public async Task<T> CreateAsync(T entity, string password)
+        {
+            var randomId = _identityNumberGenerator.GenerateIdNumber(_userType);
+
+            var userExist = await GetUserByIdentityNumber(randomId);
+
+
+            // Develop a more efficient way to ensure the identity number is unique
+            if (userExist != null)
+            {
+                return await AddAsync(entity);
+            }
+
+            var userByEmail = await GetUserByEmail(entity.Email);
+
+            if (userByEmail != null)
+            {
+                throw new ArgumentException($"A {nameof(AppUser)} exists with the email provided");
+            }
+
+            entity.IdentificationNumber = randomId;
+
+            var isCreated = await _userManager.CreateAsync(entity, password);
+
+            if (!isCreated.Succeeded)
+            {
+                var errorMessage = new StringBuilder();
+                foreach (var error in isCreated.Errors)
+                {
+                    errorMessage.AppendLine($" {error.Description}");
+                }
+                throw new ArgumentException($"Unable to create a user with the provided credentials {errorMessage.ToString().Trim()}");
+            }
+
+            return entity;
         }
     }
 }

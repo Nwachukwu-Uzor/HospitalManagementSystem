@@ -9,7 +9,11 @@ namespace HospitalManagement.Services.Profiles
     {
         public PatientProfiles()
         {
-            CreateMap<PatientCreationDto, Patient>();
+            CreateMap<PatientCreationDto, Patient>()
+                .ForMember(dest => dest.EmailConfirmed, option => option.MapFrom(src => true))
+                .ForMember(dest => dest.UserName, option => option.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Genotype, option => option.MapFrom(src => src.Genotype.ToUpper()))
+                .ForMember(dest => dest.BloodGroup, option => option.MapFrom(src => src.BloodGroup.ToUpper()));  
 
             CreateMap<Patient, PatientRequestDto>();
 

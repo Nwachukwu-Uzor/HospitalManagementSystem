@@ -78,5 +78,25 @@ namespace HospitalManagement.Api.Controllers
                 );
             }
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchForDoctor(string name = "", string email = "", int page = 1, int size = 25)
+        {
+            try
+            {
+                var doctors = await _doctorsService.SearchForDoctor(name, email, page, size);
+
+                return Ok(
+                   GenerateApiResponse<IEnumerable<DoctorRequestDto>>
+                       .GenerateSuccessResponse(doctors)
+               );
+            } catch(Exception ex)
+            {
+                return BadRequest(
+                  GenerateApiResponse<DoctorRequestDto>
+                      .GenerateFailureResponse(ex.Message)
+              );
+            }
+        }
     }
 }

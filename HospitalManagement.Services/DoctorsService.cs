@@ -19,7 +19,6 @@ namespace HospitalManagement.Services
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly IUnitOfWork _unitOfWork;
-        protected readonly IAccountService _accountService;
 
         public DoctorsService(IMapper mapper, IEmailService emailService, IUnitOfWork unitOfWork)
         {
@@ -71,6 +70,12 @@ namespace HospitalManagement.Services
             }
 
             return _mapper.Map<DoctorRequestDto>(doctor);
+        }
+
+        public async Task<IEnumerable<DoctorRequestDto>> SearchForDoctor(string name = "", string email = "", int page = 1, int size = 25)
+        {
+            var doctors = await _unitOfWork.Doctors.SearchForUsers(name, email, page, size);
+            return _mapper.Map<IEnumerable<DoctorRequestDto>>(doctors);
         }
     }
 }

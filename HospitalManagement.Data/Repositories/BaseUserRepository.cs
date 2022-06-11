@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace HospitalManagement.Data.Repositories
@@ -26,33 +27,6 @@ namespace HospitalManagement.Data.Repositories
             _identityNumberGenerator = identityNumberGenerator;
             _userManager = userManager;
         }
-        public virtual async Task<T> AddAsync(T entity)
-        {
-            var randomId = _identityNumberGenerator.GenerateIdNumber(_userType);
-
-            var userExist = await GetUserByIdentityNumber(randomId);
-
-
-            // Develop a more efficient way to ensure the identity number is unique
-            if (userExist != null)
-            {
-                return await AddAsync(entity);
-            }
-
-            var userByEmail = await GetUserByEmail(entity.Email);
-
-            if (userByEmail != null)
-            {
-                throw new ArgumentException($"A {nameof(AppUser)} exists with the email provided");
-            }
-
-            entity.IdentificationNumber = randomId;
-
-            await _dbSet.AddAsync(entity);
-
-            return await _context.SaveChangesAsync() > 0 ? entity : null;
-        }
-
         public virtual async Task<bool> DeleteAsync(Guid id)
         {
             var entity = await _dbSet.Where(ent => Guid.Parse(ent.Id) == id && ent.IsActive).FirstOrDefaultAsync();
@@ -106,7 +80,7 @@ namespace HospitalManagement.Data.Repositories
             // Develop a more efficient way to ensure the identity number is unique
             if (userExist != null)
             {
-                return await AddAsync(entity);
+                return await CreateAsync(entity, password);
             }
 
             var userByEmail = await GetUserByEmail(entity.Email);
@@ -131,6 +105,38 @@ namespace HospitalManagement.Data.Repositories
             }
 
             return entity;
+        }
+
+        public Task<T> AddAsync(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<T>> SearchForUsers(string name = "", string email = "", int page = 1, int size = 25)
+        {
+            var users = _dbSet.Where(usr => usr.IsActive).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                users = users.Where(usr => 
+                    usr.FirstName.ToLower().Contains(name.ToLower()) || 
+                    usr.MiddleName.ToLower().Contains(name.ToLower()) || 
+                    usr.LastName.ToLower().Contains(name.ToLower())
+                );
+            } 
+
+            if (Regex.IsMatch(email, @"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"))
+            {
+                users = users.Where(usr => usr.Email.ToLower() == email.ToLower());
+            }
+
+            var usersList = await users.OrderBy(usr => usr.FirstName).Skip((page - 1) * size).Take(size).ToListAsync();
+            if (!usersList.Any())
+            {
+                throw new ArgumentException("Unable to find users");
+            }
+
+            return usersList;
         }
     }
 }

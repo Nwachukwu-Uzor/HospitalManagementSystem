@@ -17,7 +17,6 @@ namespace HospitalManagement.Services
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly IUnitOfWork _unitOfWork;
-        protected readonly IAccountService _accountService;
 
         public PatientsService(IMapper mapper, IEmailService emailService, IUnitOfWork unitOfWork)
         {

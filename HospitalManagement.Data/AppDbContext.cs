@@ -12,6 +12,7 @@ namespace HospitalManagement.Data
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Staff> Staff { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Department> Departments { get; set; }
 
         public DbSet<Drug> Drugs { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

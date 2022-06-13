@@ -9,7 +9,8 @@ namespace HospitalManagement.Services.Profiles
     {
         public DepartmentProfile()
         {
-            CreateMap<DepartmentCreationDto, Department>();
+            CreateMap<DepartmentCreationDto, Department>()
+                .ForMember(dest => dest.DepartmentInitials, opt => opt.MapFrom(src => src.DepartmentInitials.ToUpper()));
             CreateMap<Department, DepartmentRequestDto>();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using HospitalManagement.Data.Repositories;
 using HospitalManagement.Domain.Contracts;
+using HospitalManagement.Domain.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HospitalManagement.Data
@@ -13,6 +14,8 @@ namespace HospitalManagement.Data
             services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDrugRepository, DrugRepository>();
+            services.AddScoped<IStaffRepository<Staff>, StaffRepository>();
+            services.AddScoped<IDepartmentsRepository, DepartmentsRepository>();
         }
     }
 }

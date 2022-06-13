@@ -36,6 +36,7 @@ namespace HospitalManagement.Api
 
 
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
             // services.ConfigureIdentity();
 

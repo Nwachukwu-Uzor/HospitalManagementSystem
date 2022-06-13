@@ -1,4 +1,5 @@
-﻿using HospitalManagement.Domain.Contracts;
+﻿using HospitalManagement.BL.Contracts;
+using HospitalManagement.Domain.Contracts;
 using HospitalManagement.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,8 +12,26 @@ namespace HospitalManagement.Data.Repositories
 {
     public class DepartmentsRepository : GenericRepository<Department>, IDepartmentsRepository
     {
-        public DepartmentsRepository(AppDbContext context) : base(context)
+        protected readonly IIdentityNumberGenerator _identityNumberGenerator;
+        public DepartmentsRepository(AppDbContext context, IIdentityNumberGenerator identityNumberGenerator) : base(context)
         {
+            _identityNumberGenerator = identityNumberGenerator;
+        }
+
+        public async Task<Department> CreateAsync(Department department)
+        {
+            var deptNumber = _identityNumberGenerator.GenerateIdNumber(department.DepartmentInitials);
+
+            var deptExist = await GetDepartmentByNumber(deptNumber);
+
+            if (deptExist != null)
+            {
+                return await CreateAsync(department);
+            }
+
+            var added = await _dbSet.AddAsync(department);
+
+            return (await _context.SaveChangesAsync() > 0) ? department : null;
         }
 
         public async Task<Department> GetDepartmentByNumber(string departmentNumber)

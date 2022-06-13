@@ -30,6 +30,15 @@ namespace HospitalManagement.Services
             try
             {
                 var userEntity = _mapper.Map<Doctor>(registrationDto);
+
+                var dept = await _unitOfWork.Departments.GetDepartmentByNumber(registrationDto.DepartmentNumber);
+
+                if (dept == null)
+                {
+                    throw new ArgumentException("Invalid department number");
+                }
+
+                userEntity.Department = dept;
                 var entityCreated = await _unitOfWork.Doctors.CreateAsync(userEntity, registrationDto.Password, new List<string> { "Staff"});
                 if (entityCreated == null)
                 {

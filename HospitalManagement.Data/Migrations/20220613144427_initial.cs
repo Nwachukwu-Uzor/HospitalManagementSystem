@@ -22,18 +22,21 @@ namespace HospitalManagement.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Department",
+                name: "Departments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartmentInitials = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DepartmentNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    DepartmentNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Department", x => x.Id);
+                    table.PrimaryKey("PK_Departments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -114,9 +117,9 @@ namespace HospitalManagement.Data.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Department_DepartmentId",
+                        name: "FK_AspNetUsers_Departments_DepartmentId",
                         column: x => x.DepartmentId,
-                        principalTable: "Department",
+                        principalTable: "Departments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -244,33 +247,33 @@ namespace HospitalManagement.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "27fb1887-cf6f-45d8-83d1-c501d6054fd3", "1122c633-5b15-410c-8f69-ed0ca8d13aa6", "Staff", "STAFF" },
-                    { "5af1f3a1-f7f9-4ad0-b757-cda796199def", "91d6cd14-463b-4d13-baed-8d62ec706961", "Administrator", "ADMINISTRATOR" },
-                    { "67228962-a44c-49a6-b89b-395dd92cf75a", "cc358df5-6e7f-4b56-b362-4c0b70c42712", "SuperAdmin", "SUPERADMIN" },
-                    { "a1ff4611-dc37-4a8e-af8e-73e764fc8676", "07691f1c-d345-4991-9a97-b496087b9909", "Patient", "PATIENT" }
+                    { "27fb1887-cf6f-45d8-83d1-c501d6054fd3", "b7ecec33-dd61-4f57-9d16-71c356635484", "Staff", "STAFF" },
+                    { "5af1f3a1-f7f9-4ad0-b757-cda796199def", "60e65b51-46b8-43a6-82c4-ce85db96a069", "Administrator", "ADMINISTRATOR" },
+                    { "67228962-a44c-49a6-b89b-395dd92cf75a", "c6964b3f-1228-47f2-9f07-df310f8b81fc", "SuperAdmin", "SUPERADMIN" },
+                    { "a1ff4611-dc37-4a8e-af8e-73e764fc8676", "8db2cc6a-1db1-4696-a71e-518cd11af779", "Patient", "PATIENT" }
                 });
 
             migrationBuilder.InsertData(
-                table: "Department",
-                columns: new[] { "Id", "DepartmentInitials", "DepartmentNumber", "Description", "Name" },
+                table: "Departments",
+                columns: new[] { "Id", "CreatedAt", "DepartmentInitials", "DepartmentNumber", "Description", "ModifiedOn", "Name", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("7da11ee0-2519-493f-816a-ba6f46aacb74"), "OTP", "OTP-1122334455", "This section of the hospital caters for patients that require medical attention but are notrequired to be admitted are treated", "Outpatient Department" },
-                    { new Guid("7cd042ca-c443-4067-91c1-6d1df0fad8d5"), "INP", "INP-1122334466", "This section of the hospital caters for patients that are required to be admitted for at least one night", "Inpatient Department" },
-                    { new Guid("368faff2-f91f-4de3-a9b9-ac6e659ced57"), "PHY", "PHY-1122334477", "This section of the hospital contains all the doctors in the hospital", "Physicians Department" },
-                    { new Guid("a0a2e6c6-3fee-46dc-a87e-dcb215029e93"), "NUR", "NUR-1122334488", "This section of the hospital contains all the nurses in the hospital", "Nursing Department" },
-                    { new Guid("12757ffa-ab81-4a23-b3a1-4f3fc169ec53"), "PHM", "PHM-1122334499", "This section of the hospital contains all the pharmacists in the hospital", "Pharmarcy Department" },
-                    { new Guid("501c0200-3c6d-48c7-8b6e-964a87f0c290"), "MLA", "MLA-1122335511", "This section of the hospital contains all the laboratory scientists and radiologists in the hospital", "Medical Laboratory Department" },
-                    { new Guid("295d3a0c-992c-4dfb-bcc2-e26fb6f9b4b8"), "ACC", "ACC-1122335522", "This section of the hospital contains all the accountants in the hospital", "Accounts Department" },
-                    { new Guid("91c4ebd1-33ae-4ef2-aeee-1d12e01d3dfb"), "RCD", "RCD-1122335533", "This section of the hospital is tasked with managing all the records in the hospital", "Records Department" },
-                    { new Guid("55ccc95d-caac-44fe-b3ee-8830184ee9b5"), "JNT", "JNT-1122335544", "This section of the hospital contains all the maintenance and cleaning staff in the hospital", "Janitorial Department" },
-                    { new Guid("2b212064-c708-44fd-a49a-6d138cdded37"), "SEC", "SEC-1122335566", "This section of the hospital contains all the security officers in the hospital", "Security Department" }
+                    { new Guid("7da11ee0-2519-493f-816a-ba6f46aacb74"), new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(3886), "OTP", "OTP-1122334455", "This section of the hospital caters for patients that require medical attention but are notrequired to be admitted are treated", new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(3901), "Outpatient Department", 1 },
+                    { new Guid("7cd042ca-c443-4067-91c1-6d1df0fad8d5"), new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6409), "INP", "INP-1122334466", "This section of the hospital caters for patients that are required to be admitted for at least one night", new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6412), "Inpatient Department", 1 },
+                    { new Guid("368faff2-f91f-4de3-a9b9-ac6e659ced57"), new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6431), "PHY", "PHY-1122334477", "This section of the hospital contains all the doctors in the hospital", new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6433), "Physicians Department", 1 },
+                    { new Guid("a0a2e6c6-3fee-46dc-a87e-dcb215029e93"), new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6438), "NUR", "NUR-1122334488", "This section of the hospital contains all the nurses in the hospital", new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6439), "Nursing Department", 1 },
+                    { new Guid("12757ffa-ab81-4a23-b3a1-4f3fc169ec53"), new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6443), "PHM", "PHM-1122334499", "This section of the hospital contains all the pharmacists in the hospital", new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6445), "Pharmarcy Department", 1 },
+                    { new Guid("501c0200-3c6d-48c7-8b6e-964a87f0c290"), new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6450), "MLA", "MLA-1122335511", "This section of the hospital contains all the laboratory scientists and radiologists in the hospital", new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6451), "Medical Laboratory Department", 1 },
+                    { new Guid("295d3a0c-992c-4dfb-bcc2-e26fb6f9b4b8"), new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6455), "ACC", "ACC-1122335522", "This section of the hospital contains all the accountants in the hospital", new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6457), "Accounts Department", 1 },
+                    { new Guid("91c4ebd1-33ae-4ef2-aeee-1d12e01d3dfb"), new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6461), "RCD", "RCD-1122335533", "This section of the hospital is tasked with managing all the records in the hospital", new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6462), "Records Department", 1 },
+                    { new Guid("55ccc95d-caac-44fe-b3ee-8830184ee9b5"), new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6466), "JNT", "JNT-1122335544", "This section of the hospital contains all the maintenance and cleaning staff in the hospital", new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6467), "Janitorial Department", 1 },
+                    { new Guid("2b212064-c708-44fd-a49a-6d138cdded37"), new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6471), "SEC", "SEC-1122335566", "This section of the hospital contains all the security officers in the hospital", new DateTime(2022, 6, 13, 14, 44, 26, 885, DateTimeKind.Utc).AddTicks(6472), "Security Department", 1 }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "DepartmentId", "DepartmentNumber", "Discriminator", "Email", "EmailConfirmed", "FirstName", "IdentificationNumber", "IsActive", "LastName", "LockoutEnabled", "LockoutEnd", "MiddleName", "ModifiedOn", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegisterationDate", "SecurityStamp", "Sex", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "300ddf19-95e6-4744-83e6-2aa5e1d444c0", 0, "Hospital Management Location", "8fc4ca24-f069-43c8-9da9-3f8920ac71ec", new Guid("2b212064-c708-44fd-a49a-6d138cdded37"), "SEC-1122335566", "Staff", "admin@hospitalManagement.com", true, "Hospital", "ST-1001123355", true, "Admin", false, null, "Default", new DateTime(2022, 6, 13, 11, 58, 6, 196, DateTimeKind.Utc).AddTicks(9254), null, null, "AQAAAAEAACcQAAAAEJ7rElv/5dlm7MTrY0I/WexGOaXymyHQT3W5VSi51tanp3lxIU2SCLTmUjTUl26Agg==", "+2348064879196", true, new DateTime(2022, 6, 13, 11, 58, 6, 196, DateTimeKind.Utc).AddTicks(9240), "b0183dce-e432-4a7a-8e19-f5324d038582", "Male", false, null });
+                values: new object[] { "300ddf19-95e6-4744-83e6-2aa5e1d444c0", 0, "Hospital Management Location", "a665ef20-95e9-4e09-ab66-983a4b8b5c02", new Guid("2b212064-c708-44fd-a49a-6d138cdded37"), "SEC-1122335566", "Staff", "admin@hospitalManagement.com", true, "Hospital", "ST-1001123355", true, "Admin", false, null, "Default", new DateTime(2022, 6, 13, 14, 44, 26, 889, DateTimeKind.Utc).AddTicks(596), null, null, "AQAAAAEAACcQAAAAEPVQhyuuIvJRcbLLDGVr0fPHB3M6S8dDPfF+X7hm1MnR4v+XBPh6TaXL6QASlPyY0g==", "+2348064879196", true, new DateTime(2022, 6, 13, 14, 44, 26, 889, DateTimeKind.Utc).AddTicks(578), "7d014ed6-d88d-40d5-a1c1-1bdfa4a2285a", "Male", false, null });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -367,7 +370,7 @@ namespace HospitalManagement.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Department");
+                name: "Departments");
         }
     }
 }

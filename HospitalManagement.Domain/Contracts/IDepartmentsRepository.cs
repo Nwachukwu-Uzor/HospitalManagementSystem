@@ -9,6 +9,7 @@ namespace HospitalManagement.Domain.Contracts
 {
     public interface IDepartmentsRepository : IGenericRepository<Department>
     {
+        Task<Department> CreateAsync(Department department);
         Task<Department> GetDepartmentByNumber(string departmentNumber);
     }
 }

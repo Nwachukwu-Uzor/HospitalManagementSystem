@@ -12,7 +12,7 @@ namespace HospitalManagement.Api.Controllers
     public class DoctorsController : BaseController
     {
         private readonly IDoctorsService _doctorsService;
-        public DoctorsController(IDoctorsService doctorsService) : base()
+        public DoctorsController(IDoctorsService doctorsService) 
         {
             _doctorsService = doctorsService;
         }

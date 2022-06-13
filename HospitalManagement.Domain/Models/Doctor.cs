@@ -1,6 +1,6 @@
 ﻿namespace HospitalManagement.Domain.Models
 {
-    public class Doctor : AppUser
+    public class Doctor : Staff
     {
     }
 }

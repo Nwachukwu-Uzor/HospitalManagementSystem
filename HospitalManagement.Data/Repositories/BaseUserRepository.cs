@@ -19,13 +19,18 @@ namespace HospitalManagement.Data.Repositories
         protected readonly AppDbContext _context;
         protected readonly IIdentityNumberGenerator _identityNumberGenerator;
         protected readonly UserManager<AppUser> _userManager;
-        public BaseUserRepository(AppDbContext context, IIdentityNumberGenerator identityNumberGenerator, string userType, UserManager<AppUser> userManager)
+        protected readonly List<string> _roles;
+        public BaseUserRepository(
+            AppDbContext context, IIdentityNumberGenerator identityNumberGenerator, 
+            string userType, UserManager<AppUser> userManager, List<string> roles
+        )
         {
             _dbSet = context.Set<T>();
             _context = context;
             _userType = userType;
             _identityNumberGenerator = identityNumberGenerator;
             _userManager = userManager;
+            _roles = roles;
         }
         public virtual async Task<bool> DeleteAsync(Guid id)
         {
@@ -70,7 +75,7 @@ namespace HospitalManagement.Data.Repositories
            return await _dbSet.Where(user => user.Email == email).FirstOrDefaultAsync();
         }
 
-        public async Task<T> CreateAsync(T entity, string password)
+        public async Task<T> CreateAsync(T entity, string password, List<string> roles)
         {
             var randomId = _identityNumberGenerator.GenerateIdNumber(_userType);
 
@@ -80,7 +85,7 @@ namespace HospitalManagement.Data.Repositories
             // Develop a more efficient way to ensure the identity number is unique
             if (userExist != null)
             {
-                return await CreateAsync(entity, password);
+                return await CreateAsync(entity, password, _roles);
             }
 
             var userByEmail = await GetUserByEmail(entity.Email);
@@ -103,6 +108,8 @@ namespace HospitalManagement.Data.Repositories
                 }
                 throw new ArgumentException($"Unable to create a user with the provided credentials {errorMessage.ToString().Trim()}");
             }
+
+            await _userManager.AddToRolesAsync(entity, _roles);
 
             return entity;
         }

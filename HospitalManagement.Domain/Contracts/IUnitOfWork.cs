@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HospitalManagement.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,7 @@ namespace HospitalManagement.Domain.Contracts
         public IAppointmentsRepository Appointments { get; }
 
         public IDrugRepository Drugs { get; }
+        public IDepartmentsRepository Departments { get; }
+        public IStaffRepository<Staff> Staff { get; }
     }
 }

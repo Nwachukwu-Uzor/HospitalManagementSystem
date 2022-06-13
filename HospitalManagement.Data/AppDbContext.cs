@@ -1,6 +1,7 @@
 ﻿using HospitalManagement.Domain.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace HospitalManagement.Data
 {
@@ -15,5 +16,12 @@ namespace HospitalManagement.Data
         public DbSet<Drug> Drugs { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace HospitalManagement.Domain.Contracts
 {
-    public interface IDoctorsRepository : IStaffRepository<Doctor>
+    public interface IStaffRepository<T> : IUserRepository<T> where T : Staff
     {
     }
 }

@@ -19,7 +19,6 @@ namespace HospitalManagement.Services
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly IUnitOfWork _unitOfWork;
-
         public DoctorsService(IMapper mapper, IEmailService emailService, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
@@ -31,7 +30,7 @@ namespace HospitalManagement.Services
             try
             {
                 var userEntity = _mapper.Map<Doctor>(registrationDto);
-                var entityCreated = await _unitOfWork.Doctors.CreateAsync(userEntity, registrationDto.Password);
+                var entityCreated = await _unitOfWork.Doctors.CreateAsync(userEntity, registrationDto.Password, new List<string> { "Staff"});
                 if (entityCreated == null)
                 {
                     throw new ArgumentException("Unable to create doctor with the credential provided");

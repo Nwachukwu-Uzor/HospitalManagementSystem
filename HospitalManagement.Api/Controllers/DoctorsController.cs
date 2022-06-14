@@ -17,31 +17,6 @@ namespace HospitalManagement.Api.Controllers
             _doctorsService = doctorsService;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<DoctorRequestDto>> CreateDoctorAsync(DoctorCreationDto registrationDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(
-                    GenerateApiResponse<DoctorRequestDto>.GenerateFailureResponse("Something went wrong")
-                );
-            }
-            try
-            {
-                var doctor = await _doctorsService.CreateDoctorAsync(registrationDto);
-
-                return CreatedAtRoute(
-                    nameof(GetDoctorByIdentityNumberAsync),
-                    new { doctorIdentityNumber = doctor.IdentificationNumber },
-                    GenerateApiResponse<DoctorRequestDto>.GenerateSuccessResponse(doctor)
-                );
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(GenerateApiResponse<DoctorRequestDto>.GenerateFailureResponse(ex.Message));
-            }
-        }
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DoctorRequestDto>>> GetAllDoctorsAsync(int pageNumber = 1, int pageSize = 50)
         {

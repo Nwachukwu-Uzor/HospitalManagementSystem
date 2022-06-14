@@ -34,8 +34,8 @@ namespace HospitalManagement.Api.Controllers
             }
         }
 
-        [HttpGet("{departmentNumber}", Name = nameof(GetDeparmentByNumber))]
-        public async Task<IActionResult> GetDeparmentByNumber(string departmentNumber)
+        [HttpGet("{departmentNumber}", Name = nameof(GetDepartmentByNumber))]
+        public async Task<IActionResult> GetDepartmentByNumber(string departmentNumber)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace HospitalManagement.Api.Controllers
                 var dept = await _departmentService.CreateDepartment(department);
 
                 return CreatedAtAction(
-                    nameof(GetDeparmentByNumber),
+                    nameof(GetDepartmentByNumber),
                     new { departmentNumber = dept.DepartmentNumber },
                     GenerateApiResponse<DepartmentRequestDto>.GenerateSuccessResponse(dept)
                 );

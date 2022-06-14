@@ -19,10 +19,9 @@ namespace HospitalManagement.Data.Repositories
         protected readonly AppDbContext _context;
         protected readonly IIdentityNumberGenerator _identityNumberGenerator;
         protected readonly UserManager<AppUser> _userManager;
-        protected readonly List<string> _roles;
         public BaseUserRepository(
             AppDbContext context, IIdentityNumberGenerator identityNumberGenerator, 
-            string userType, UserManager<AppUser> userManager, List<string> roles
+            string userType, UserManager<AppUser> userManager
         )
         {
             _dbSet = context.Set<T>();
@@ -30,7 +29,6 @@ namespace HospitalManagement.Data.Repositories
             _userType = userType;
             _identityNumberGenerator = identityNumberGenerator;
             _userManager = userManager;
-            _roles = roles;
         }
         public virtual async Task<bool> DeleteAsync(Guid id)
         {
@@ -73,45 +71,6 @@ namespace HospitalManagement.Data.Repositories
         public virtual async Task<T> GetUserByEmail(string email)
         {
            return await _dbSet.Where(user => user.Email == email).FirstOrDefaultAsync();
-        }
-
-        public async Task<T> CreateAsync(T entity, string password, List<string> roles)
-        {
-            var randomId = _identityNumberGenerator.GenerateIdNumber(_userType);
-
-            var userExist = await GetUserByIdentityNumber(randomId);
-
-
-            // Develop a more efficient way to ensure the identity number is unique
-            if (userExist != null)
-            {
-                return await CreateAsync(entity, password, _roles);
-            }
-
-            var userByEmail = await GetUserByEmail(entity.Email);
-
-            if (userByEmail != null)
-            {
-                throw new ArgumentException($"A {nameof(AppUser)} exists with the email provided");
-            }
-
-            entity.IdentificationNumber = randomId;
-
-            var isCreated = await _userManager.CreateAsync(entity, password);
-
-            if (!isCreated.Succeeded)
-            {
-                var errorMessage = new StringBuilder();
-                foreach (var error in isCreated.Errors)
-                {
-                    errorMessage.AppendLine($" {error.Description}");
-                }
-                throw new ArgumentException($"Unable to create a user with the provided credentials {errorMessage.ToString().Trim()}");
-            }
-
-            await _userManager.AddToRolesAsync(entity, _roles);
-
-            return entity;
         }
 
         public Task<T> AddAsync(T entity)

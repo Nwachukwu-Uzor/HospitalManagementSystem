@@ -29,7 +29,9 @@ namespace HospitalManagement.Data.Repositories
                 return await CreateAsync(department);
             }
 
-            var added = await _dbSet.AddAsync(department);
+            department.DepartmentNumber = deptNumber;
+
+            await _dbSet.AddAsync(department);
 
             return (await _context.SaveChangesAsync() > 0) ? department : null;
         }

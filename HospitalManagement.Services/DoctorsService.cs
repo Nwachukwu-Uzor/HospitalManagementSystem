@@ -17,49 +17,11 @@ namespace HospitalManagement.Services
     public class DoctorsService : IDoctorsService
     {
         private readonly IMapper _mapper;
-        private readonly IEmailService _emailService;
         private readonly IUnitOfWork _unitOfWork;
-        public DoctorsService(IMapper mapper, IEmailService emailService, IUnitOfWork unitOfWork)
+        public DoctorsService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
-            _emailService = emailService;
             _unitOfWork = unitOfWork;
-        }
-        public async Task<DoctorRequestDto> CreateDoctorAsync(DoctorCreationDto registrationDto)
-        {
-            try
-            {
-                var userEntity = _mapper.Map<Doctor>(registrationDto);
-
-                var dept = await _unitOfWork.Departments.GetDepartmentByNumber(registrationDto.DepartmentNumber);
-
-                if (dept == null)
-                {
-                    throw new ArgumentException("Invalid department number");
-                }
-
-                userEntity.Department = dept;
-                var entityCreated = await _unitOfWork.Doctors.CreateAsync(userEntity, registrationDto.Password, new List<string> { "Staff"});
-                if (entityCreated == null)
-                {
-                    throw new ArgumentException("Unable to create doctor with the credential provided");
-                }
-
-                var emailToSend = _emailService.CreateAccountRegistrationMail(
-                    entityCreated.IdentificationNumber,
-                    entityCreated.Email,
-                    entityCreated.FirstName,
-                    entityCreated.LastName,
-                    "Doctor"
-                );
-
-                var isEmailSent = await _emailService.SendMail(emailToSend);
-
-                return _mapper.Map<DoctorRequestDto>(entityCreated);
-            } catch(Exception ex)
-            {
-                throw new ArgumentException(ex.Message);
-            }
         }
 
         public async Task<IEnumerable<DoctorRequestDto>> GetAllDoctorsAsync(int pageNumber = 1, int pageSize = 50)

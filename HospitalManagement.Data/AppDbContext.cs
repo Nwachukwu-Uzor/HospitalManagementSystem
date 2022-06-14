@@ -14,6 +14,7 @@ namespace HospitalManagement.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Department> Departments { get; set; }
 
+
         public DbSet<Drug> Drugs { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
@@ -21,7 +22,6 @@ namespace HospitalManagement.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

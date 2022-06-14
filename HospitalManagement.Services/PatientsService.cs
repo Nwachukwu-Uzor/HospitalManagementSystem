@@ -15,45 +15,12 @@ namespace HospitalManagement.Services
     public class PatientsService : IPatientsService
     {
         private readonly IMapper _mapper;
-        private readonly IEmailService _emailService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public PatientsService(IMapper mapper, IEmailService emailService, IUnitOfWork unitOfWork)
+        public PatientsService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
-            _emailService = emailService;
             _unitOfWork = unitOfWork;
-        }
-        public async Task<PatientRequestDto> CreatePatientAsync(PatientCreationDto patientRegistrationDto)
-        {
-            try
-            {
-                var patientEntity = _mapper.Map<Patient>(patientRegistrationDto);
-
-                var patientCreated = await _unitOfWork.Patients.CreateAsync(patientEntity, patientRegistrationDto.Password, new List<string> { "Patient"});
-
-                if (patientCreated == null)
-                {
-                    throw new ArgumentException("Unable to create patient with the data provided");
-                }
-
-                var emailToSend = _emailService.CreateAccountRegistrationMail(
-                   patientCreated.IdentificationNumber,
-                   patientCreated.Email,
-                   patientCreated.FirstName,
-                   patientCreated.LastName,
-                   "Patient"
-               );
-
-
-                await _emailService.SendMail(emailToSend);
-
-                return _mapper.Map<PatientRequestDto>(patientCreated);
-            } catch(Exception ex)
-            {
-                throw new ArgumentException(ex.Message);
-            }
-            
         }
 
         public async Task<IEnumerable<PatientRequestDto>> GetAllPatients(int page = 1, int pageSize = 50)

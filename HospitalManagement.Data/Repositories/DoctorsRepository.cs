@@ -10,7 +10,7 @@ namespace HospitalManagement.Data.Repositories
     {
 
         public DoctorsRepository(AppDbContext context, IIdentityNumberGenerator identityNumberGenerator, UserManager<AppUser> userManager) 
-        : base(context, identityNumberGenerator, "DCT", userManager, new List<string> { "Staff" })
+        : base(context, identityNumberGenerator, "DCT", userManager)
         {
         }
     }

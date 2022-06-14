@@ -17,25 +17,6 @@ namespace HospitalManagement.Api.Controllers
             _patientsService = patientsService;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<PatientRequestDto>> CreatePatientAsync(PatientCreationDto patientRegistrationDto)
-        {
-            try
-            {
-                var patientCreated = await _patientsService.CreatePatientAsync(patientRegistrationDto);
-
-                return CreatedAtRoute(
-                    nameof(GetPatientByIdentityNumberAsync), 
-                    new { patientIdentificationNumber = patientCreated.IdentificationNumber }, 
-                     GenerateApiResponse<PatientRequestDto>.GenerateSuccessResponse(patientCreated)
-                );
-
-            } catch(Exception ex)
-            {
-                return BadRequest(GenerateApiResponse<PatientRequestDto>.GenerateFailureResponse(ex.Message));
-            }
-        }
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PatientRequestDto>>> GetAllPatients(int page = 1, int pageSize = 50)
         {

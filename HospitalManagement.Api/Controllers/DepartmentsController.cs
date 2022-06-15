@@ -3,6 +3,7 @@ using HospitalManagement.Services.Contracts;
 using HospitalManagement.Services.Dtos.Incoming.Departments;
 using HospitalManagement.Services.Dtos.Outgoing.Departments;
 using HospitalManagement.Services.Dtos.Outgoing.Doctors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -48,6 +49,7 @@ namespace HospitalManagement.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         public async Task<IActionResult> CreateDepartment(DepartmentCreationDto department)
         {

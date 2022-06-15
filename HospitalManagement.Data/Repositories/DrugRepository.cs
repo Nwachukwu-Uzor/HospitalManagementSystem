@@ -16,11 +16,6 @@ namespace HospitalManagement.Data.Repositories
             _IdentityNumberGenerator = identityNumberGenerator;
         }
 
-        //public override async Task<IEnumerable<Drug>> GetAllPaginatedAsync(int pageNumber, int pageSize)
-        //{
-        //    return await _dbSet.Where(entity => entity.Status == 1).Skip((pageNumber - 1) * pageSize).Take(pageSize).OrderBy(drug => drug.Name).ToListAsync();
-        //}
-
         public override async Task<Drug> AddAsync(Drug drug)
         {
             var identityNumber = _IdentityNumberGenerator.GenerateIdNumber("DG");

@@ -86,6 +86,9 @@ namespace HospitalManagement.Api.Controllers
             }
         }
 
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "SuperAdmin, Admin")]
         [HttpPost("register/patient")]
         public async Task<IActionResult> RegisterDoctor(PatientCreationDto patient)
@@ -99,6 +102,25 @@ namespace HospitalManagement.Api.Controllers
             catch (Exception ex)
             {
                 return BadRequest(GenerateApiResponse<PatientRequestDto>.GenerateFailureResponse(ex.Message));
+            }
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPut("admin-modify")]
+        public async Task<IActionResult> MakeStaffAdmin(StaffAdminDto staffDto)
+        {
+            try
+            {
+                var isChanged = await _accountService.MakeStaffAdmin(staffDto);
+                if(!isChanged)
+                {
+                    return BadRequest(GenerateApiResponse<StaffAdminDto>.GenerateFailureResponse("Unable to create staff"));
+                }
+
+                return Ok(GenerateApiResponse<StaffAdminDto>.GenerateEmptySuccessMessage("Successfully made an admin"));
+            } catch(Exception ex)
+            {
+                return BadRequest(GenerateApiResponse<StaffAdminDto>.GenerateFailureResponse(ex.Message));
             }
         }
     }

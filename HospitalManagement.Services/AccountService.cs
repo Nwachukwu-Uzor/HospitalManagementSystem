@@ -59,13 +59,13 @@ namespace HospitalManagement.Services
             throw new NotImplementedException();
         }
 
-        public async Task<bool> MakeStaffAdmin(string email)
+        public async Task<bool> MakeStaffAdmin(StaffAdminDto staffDto)
         {
-            var staff = await _userManager.FindByEmailAsync(email);
+            var staff = await _unitOfWork.Staff.GetUserByIdentityNumber(staffDto.IdentificationNumber);
 
             if (staff == null)
             {
-                throw new ArgumentException("No staff with the email number provided");
+                throw new ArgumentException("No staff with the identification number provided");
             }
 
             var roles = await _userManager.GetRolesAsync(staff);
@@ -74,11 +74,11 @@ namespace HospitalManagement.Services
 
             if (!hasRole)
             {
-                throw new ArgumentException("The user with the email provided is not a staff");
+                throw new ArgumentException("The user with the identification number provided is not a staff");
             }
 
-            await _userManager.AddToRoleAsync(staff, ADMIN_ROLE);
-            return true;
+           var added = await _userManager.AddToRoleAsync(staff, ADMIN_ROLE);
+            return added.Succeeded;
         }
 
         public async Task<DoctorRequestDto> RegisterNewDoctor(DoctorCreationDto doctor)

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HospitalManagement.Api.Response
+﻿namespace HospitalManagement.Api.Response
 {
     public class GenerateApiResponse<T>
     {
@@ -12,7 +7,7 @@ namespace HospitalManagement.Api.Response
             return new ApiResponse<T>
             {
                 Data = default,
-                Error = error,
+                Message = error,
                 Success = false
             };
         }
@@ -22,7 +17,17 @@ namespace HospitalManagement.Api.Response
             return new ApiResponse<T>
             {
                 Data = data,
-                Error = null,
+                Message = null,
+                Success = true
+            };
+        }
+
+        public static ApiResponse<T> GenerateEmptySuccessMessage(string message)
+        {
+            return new ApiResponse<T>
+            {
+                Data = default,
+                Message = message,
                 Success = true
             };
         }

@@ -46,9 +46,39 @@ namespace HospitalManagement.Services
             _emailService = emailService;
         }
 
+        public async Task<bool> DeleteAccount(string email)
+        {
+            var user = _userManager.FindByEmailAsync(email);
+
+
+            throw new NotImplementedException();
+        }
+
         public Task<bool> LoginAccount(string email, string password)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> MakeStaffAdmin(string email)
+        {
+            var staff = await _userManager.FindByEmailAsync(email);
+
+            if (staff == null)
+            {
+                throw new ArgumentException("No staff with the email number provided");
+            }
+
+            var roles = await _userManager.GetRolesAsync(staff);
+
+            var hasRole = roles.Any(r => r == STAFF_ROLE);
+
+            if (!hasRole)
+            {
+                throw new ArgumentException("The user with the email provided is not a staff");
+            }
+
+            await _userManager.AddToRoleAsync(staff, ADMIN_ROLE);
+            return true;
         }
 
         public async Task<DoctorRequestDto> RegisterNewDoctor(DoctorCreationDto doctor)

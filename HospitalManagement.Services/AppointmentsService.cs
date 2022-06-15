@@ -81,7 +81,7 @@ namespace HospitalManagement.Services
         {
             try
             {
-                var appointments = await _unitOfWork.Appointments.GetAllPaginatedAsync(page, pageSize);
+                var appointments = await _unitOfWork.Appointments.GetAllPaginatedAsync(page, pageSize, new List<string> { "Doctor", "Patient" });
                 return _mapper.Map<IEnumerable<AppointmentRequestDto>>(appointments);
             } catch(Exception ex)
             {

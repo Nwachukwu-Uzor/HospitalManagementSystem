@@ -14,5 +14,7 @@ namespace HospitalManagement.Services.Contracts
         Task<PatientRequestDto> RegisterNewPatient(PatientCreationDto patient);
         Task<StaffRequestDto> RegisterNewStaff(StaffCreationDto staff);
         Task<bool> LoginAccount(string email, string password);
+        Task<bool> DeleteAccount(string email);
+        Task<bool> MakeStaffAdmin(string email);
     }
 }

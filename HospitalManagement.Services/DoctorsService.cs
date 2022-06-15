@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
-using HospitalManagement.BL.Contracts;
-using HospitalManagement.Data;
 using HospitalManagement.Domain.Contracts;
-using HospitalManagement.Domain.Models;
 using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Dtos.Incoming.Doctors;
 using HospitalManagement.Services.Dtos.Outgoing.Doctors;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HospitalManagement.Services
@@ -26,7 +20,7 @@ namespace HospitalManagement.Services
 
         public async Task<IEnumerable<DoctorRequestDto>> GetAllDoctorsAsync(int pageNumber = 1, int pageSize = 50)
         {
-            var doctors = await _unitOfWork.Doctors.GetAllPaginatedAsync(pageNumber, pageSize);
+            var doctors = await _unitOfWork.Doctors.GetAllPaginatedAsync(pageNumber, pageSize, new List<string> { "Department" });
             return _mapper.Map<IEnumerable<DoctorRequestDto>>(doctors);
         }
 

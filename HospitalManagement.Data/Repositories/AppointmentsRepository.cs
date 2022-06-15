@@ -58,13 +58,13 @@ namespace HospitalManagement.Data.Repositories
 
             return await base.AddAsync(appointment);
         }
-        public async override Task<IEnumerable<Appointment>> GetAllPaginatedAsync(int pageNumber, int pageSize)
-        {
-            return await _dbSet.Where(appoint => appoint.Status == 1).Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                                .Include(app => app.Doctor)
-                                .Include(app => app.Patient)
-                                .OrderBy(app => app.CreatedAt).ToListAsync(); ;
-        }
+        //public async override Task<IEnumerable<Appointment>> GetAllPaginatedAsync(int pageNumber, int pageSize, new List<)
+        //{
+        //    return await _dbSet.Where(appoint => appoint.Status == 1).Skip((pageNumber - 1) * pageSize).Take(pageSize)
+        //                        .Include(app => app.Doctor)
+        //                        .Include(app => app.Patient)
+        //                        .OrderBy(app => app.CreatedAt).ToListAsync(); ;
+        //}
 
         public async Task<IEnumerable<Appointment>> GetAppointmentsForDoctorAsync(string doctorIdentityNumber, int pageSize, int pageNumber)
         {

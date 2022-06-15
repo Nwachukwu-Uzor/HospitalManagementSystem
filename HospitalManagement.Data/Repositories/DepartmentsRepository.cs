@@ -13,9 +13,11 @@ namespace HospitalManagement.Data.Repositories
     public class DepartmentsRepository : GenericRepository<Department>, IDepartmentsRepository
     {
         protected readonly IIdentityNumberGenerator _identityNumberGenerator;
+        private readonly DbSet<Staff> _staffSet;
         public DepartmentsRepository(AppDbContext context, IIdentityNumberGenerator identityNumberGenerator) : base(context)
         {
             _identityNumberGenerator = identityNumberGenerator;
+            _staffSet = context.Staff;
         }
 
         public async Task<Department> CreateAsync(Department department)

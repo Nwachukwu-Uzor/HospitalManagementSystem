@@ -7,6 +7,7 @@ using HospitalManagement.Services.Dtos.Incoming.Staff;
 using HospitalManagement.Services.Dtos.Outgoing.Doctors;
 using HospitalManagement.Services.Dtos.Outgoing.Patients;
 using HospitalManagement.Services.Dtos.Outgoing.Staff;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -53,7 +54,7 @@ namespace HospitalManagement.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "SuperAdmin, Admin")]
         [HttpPost("register/staff")]
         public async Task<IActionResult> RegisterDoctor(StaffCreationDto staff)
         {
@@ -69,6 +70,7 @@ namespace HospitalManagement.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "SuperAdmin, Admin")]
         [HttpPost("register/doctor")]
         public async Task<IActionResult> RegisterDoctor(DoctorCreationDto doctor)
         {
@@ -84,7 +86,7 @@ namespace HospitalManagement.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "SuperAdmin, Admin")]
         [HttpPost("register/patient")]
         public async Task<IActionResult> RegisterDoctor(PatientCreationDto patient)
         {

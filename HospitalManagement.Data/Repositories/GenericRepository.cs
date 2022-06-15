@@ -38,9 +38,19 @@ namespace HospitalManagement.Data.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public virtual async Task<IEnumerable<T>> GetAllPaginatedAsync(int pageNumber, int pageSize)
+        public virtual async Task<IEnumerable<T>> GetAllPaginatedAsync(int pageNumber, int pageSize, List<string> options = null)
         {
-            return await _dbSet.Where(entity => entity.Status == 1).Skip((pageNumber - 1) * pageSize).Take(pageSize).OrderBy(pat => pat.CreatedAt).ToListAsync();
+            var users = _dbSet.Where(entity => entity.Status == 1);
+               
+            if (options != null)
+            {
+                foreach(var option in options)
+                {
+                    users = users.Include(option);
+                }
+            }
+                
+            return await users.OrderBy(pat => pat.CreatedAt).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 
         public virtual async Task<T> GetByIdAsync(Guid id)

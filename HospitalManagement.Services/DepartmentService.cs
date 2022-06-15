@@ -4,6 +4,7 @@ using HospitalManagement.Domain.Models;
 using HospitalManagement.Services.Contracts;
 using HospitalManagement.Services.Dtos.Incoming.Departments;
 using HospitalManagement.Services.Dtos.Outgoing.Departments;
+using HospitalManagement.Services.Dtos.Outgoing.Staff;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,12 @@ namespace HospitalManagement.Services
             var dept = await _unitOfWork.Departments.GetDepartmentByNumber(identificationNumber);
 
             return _mapper.Map<DepartmentRequestDto>(dept);
+        }
+
+        public async Task<IEnumerable<StaffRequestDto>> GetStaffForDepartment(string departmentNumber, int page, int size)
+        {
+            var departments = await _unitOfWork.Staff.GetStaffForDepartment(departmentNumber, page, size);
+            return _mapper.Map<IEnumerable<StaffRequestDto>>(departments);
         }
     }
 }

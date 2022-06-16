@@ -10,7 +10,7 @@ namespace HospitalManagement.Services.Dtos.Incoming.Departments
     public class DepartmentCreationDto
     {
         [Required]
-        [StringLength(25, ErrorMessage = "Department name length should be between 5 and 25 characters", MinimumLength = 5)]
+        [StringLength(50, ErrorMessage = "Department name length should be between 5 and 50 characters", MinimumLength = 5)]
         public string Name { get; set; }
         [Required]
         [StringLength(3, ErrorMessage = "Department initial should be 3 characters long", MinimumLength = 3)]

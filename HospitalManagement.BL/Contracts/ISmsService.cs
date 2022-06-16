@@ -4,6 +4,6 @@ namespace HospitalManagement.BL.Contracts
 {
     public interface ISmsService
     {
-        public string SendSms(SMS message);
+        public void SendSms(SMS message);
     }
 }

@@ -19,6 +19,7 @@ namespace HospitalManagement.Services
             services.AddScoped<IDepartmentsService, DepartmentService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IStaffService, StaffService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 

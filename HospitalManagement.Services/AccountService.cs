@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HospitalManagement.BL.Contracts;
+using HospitalManagement.BL.Models;
 using HospitalManagement.Domain.Contracts;
 using HospitalManagement.Domain.Models;
 using HospitalManagement.Services.Contracts;
@@ -33,17 +34,20 @@ namespace HospitalManagement.Services
         private readonly IMapper _mapper;
         private readonly IIdentityNumberGenerator _identityNumberGenerator;
         private readonly IEmailService _emailService;
+        private readonly ISmsService _smsService;
 
         public AccountService(
             UserManager<AppUser> userManager, IUnitOfWork unitOfWork,
             IMapper mapper, IIdentityNumberGenerator identityNumberGenerator,
-            IEmailService emailService)
+            IEmailService emailService, ISmsService smsService
+        )
         {
             _userManager = userManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _identityNumberGenerator = identityNumberGenerator;
             _emailService = emailService;
+            _smsService = smsService;
         }
 
         public async Task<bool> DeleteAccount(string email)
@@ -132,6 +136,13 @@ namespace HospitalManagement.Services
              );
 
             var isEmailSent = await _emailService.SendMail(emailToSend);
+            _smsService.SendSms(
+                new SMS
+                {
+                    Body = $"Account created successfully {doctorEntity.IdentificationNumber}",
+                    To = doctorEntity.PhoneNumber
+                }
+            );
 
             return _mapper.Map<DoctorRequestDto>(doctorEntity);
         }

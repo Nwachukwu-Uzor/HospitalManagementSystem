@@ -2,6 +2,8 @@
 using HospitalManagement.Services.Contracts;
 using HospitalManagement.Services.Dtos.Incoming.Drugs;
 using HospitalManagement.Services.Dtos.Outgoing.Drugs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement.Api.Controllers
 {
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public class DrugsController : BaseController
     {
         private readonly IDrugsService _drugsService;
@@ -95,6 +98,28 @@ namespace HospitalManagement.Api.Controllers
             } catch(Exception ex)
             {
                 return BadRequest(GenerateApiResponse<IEnumerable<DrugRequestDto>>.GenerateFailureResponse(ex.Message));
+            }
+        }
+
+        
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpDelete("{drugIdentificationNumber}/delete")]
+        public async Task<IActionResult> DeleteDrug(string drugIdentificationNumber)
+        {
+            try
+            {
+                var isDeleted = await _drugsService.DeleteDrug(drugIdentificationNumber);
+
+                if (!isDeleted)
+                {
+                    return BadRequest(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse("Unable to delete drug"));
+                }
+
+                return Ok(GenerateApiResponse<DrugRequestDto>.GenerateEmptySuccessMessage("Drug deleted successfully"));
+            } catch(Exception ex)
+            {
+                return BadRequest(GenerateApiResponse<DrugRequestDto>.GenerateFailureResponse(ex.Message));
             }
         }
     }

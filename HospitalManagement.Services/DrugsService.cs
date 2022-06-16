@@ -36,6 +36,24 @@ namespace HospitalManagement.Services
             }
         }
 
+        public async Task<bool> DeleteDrug(string drugIdentificationNumber)
+        {
+            try
+            {
+                var drug = await _unitOfWork.Drugs.GetDrugByIdentityNumber(drugIdentificationNumber);
+
+                if (drug == null)
+                {
+                    throw new ArgumentNullException("Unable to find drug with the given identification number");
+                }
+
+                return await _unitOfWork.Drugs.DeleteAsync(drug.Id);
+            } catch(Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<DrugRequestDto>> GetAllDrugs(int page = 1, int size = 50)
         {
            try

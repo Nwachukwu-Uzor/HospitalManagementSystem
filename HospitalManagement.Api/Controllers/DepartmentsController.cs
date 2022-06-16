@@ -3,6 +3,7 @@ using HospitalManagement.Services.Contracts;
 using HospitalManagement.Services.Dtos.Incoming.Departments;
 using HospitalManagement.Services.Dtos.Outgoing.Departments;
 using HospitalManagement.Services.Dtos.Outgoing.Doctors;
+using HospitalManagement.Services.Dtos.Outgoing.Staff;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement.Api.Controllers
 {
+    [Authorize]
     public class DepartmentsController : BaseController
     {
         private readonly IDepartmentsService _departmentService;
@@ -69,6 +71,21 @@ namespace HospitalManagement.Api.Controllers
             } catch(Exception ex)
             {
                 return StatusCode(statusCode: 500, GenerateApiResponse<DepartmentRequestDto>.GenerateFailureResponse(ex.Message));
+            }
+        }
+
+        [Authorize(Roles = "SuperAdmin, Admin")]
+        [HttpGet("getstaff/{departmentIdentificationNumber}")]
+        public async Task<IActionResult> GetStaffForDepartment(string departmentIdentificationNumber, int page=1, int size=25)
+        {
+            try
+            {
+                var staff = await _departmentService.GetStaffForDepartment(departmentIdentificationNumber, page, size);
+
+                return Ok(GenerateApiResponse<IEnumerable<StaffRequestDto>>.GenerateSuccessResponse(staff));
+            } catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

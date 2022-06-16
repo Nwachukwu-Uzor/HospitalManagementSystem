@@ -1,8 +1,10 @@
-﻿namespace HospitalManagement.Domain.Models
+﻿using HospitalManagement.Domain.Enums;
+
+namespace HospitalManagement.Domain.Models
 {
     public class Patient : AppUser
     {
-        public string BloodGroup { get; set; }
-        public string Genotype { get; set; }
+        public BloodGroup BloodGroup { get; set; }
+        public Genotype Genotype { get; set; }
     }
 }

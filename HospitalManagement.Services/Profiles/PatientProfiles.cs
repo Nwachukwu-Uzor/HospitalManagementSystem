@@ -11,15 +11,12 @@ namespace HospitalManagement.Services.Profiles
         {
             CreateMap<PatientCreationDto, Patient>()
                 .ForMember(dest => dest.EmailConfirmed, option => option.MapFrom(src => true))
-                .ForMember(dest => dest.UserName, option => option.MapFrom(src => src.Email))
-                .ForMember(dest => dest.Genotype, option => option.MapFrom(src => src.Genotype.ToUpper()))
-                .ForMember(dest => dest.BloodGroup, option => option.MapFrom(src => src.BloodGroup.ToUpper()));  
+                .ForMember(dest => dest.UserName, option => option.MapFrom(src => src.Email));  
 
-            CreateMap<Patient, PatientRequestDto>();
-
-            CreateMap<PatientCreationDto, AppUser>()
-                .ForMember(dest => dest.EmailConfirmed, option => option.MapFrom(src => true))
-                .ForMember(dest => dest.UserName, option => option.MapFrom(src => src.Email));
+            CreateMap<Patient, PatientRequestDto>()
+                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex.ToString()))
+                .ForMember(dest => dest.Genotype, opt => opt.MapFrom(src => src.Genotype.ToString()))
+                .ForMember(dest => dest.BloodGroup, opt => opt.MapFrom(src => src.BloodGroup.ToString()));
         }
     }
 }

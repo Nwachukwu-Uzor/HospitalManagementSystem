@@ -136,13 +136,13 @@ namespace HospitalManagement.Services
              );
 
             var isEmailSent = await _emailService.SendMail(emailToSend);
-            _smsService.SendSms(
-                new SMS
-                {
-                    Body = $"Account created successfully {doctorEntity.IdentificationNumber}",
-                    To = doctorEntity.PhoneNumber
-                }
-            );
+            //_smsService.SendSms(
+            //    new SMS
+            //    {
+            //        Body = $"Account created successfully {doctorEntity.IdentificationNumber}",
+            //        To = doctorEntity.PhoneNumber
+            //    }
+            //);
 
             return _mapper.Map<DoctorRequestDto>(doctorEntity);
         }

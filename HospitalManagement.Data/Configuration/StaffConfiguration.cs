@@ -1,4 +1,5 @@
-﻿using HospitalManagement.Domain.Models;
+﻿using HospitalManagement.Domain.Enums;
+using HospitalManagement.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -24,7 +25,7 @@ namespace HospitalManagement.Data.Configuration
                 NormalizedEmail = "ADMIN@HOSPITALMANAGEMENT.COM",
                 UserName = "admin@hospitalManagement.com",
                 NormalizedUserName = "ADMIN@HOSPITALMANAGEMENT.COM",
-                Sex = "Male",
+                Sex = Gender.MALE,
                 Address = "Hospital Management Location",
                 PhoneNumber = "+2348064879196",
                 EmailConfirmed = true,

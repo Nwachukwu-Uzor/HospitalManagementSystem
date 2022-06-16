@@ -92,8 +92,8 @@ namespace HospitalManagement.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Sex")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Sex")
+                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -197,110 +197,110 @@ namespace HospitalManagement.Data.Migrations
                         new
                         {
                             Id = new Guid("7da11ee0-2519-493f-816a-ba6f46aacb74"),
-                            CreatedAt = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(1492),
+                            CreatedAt = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(5635),
                             DepartmentInitials = "OTP",
                             DepartmentNumber = "OTP-1122334455",
                             Description = "This section of the hospital caters for patients that require medical attention but are notrequired to be admitted are treated",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(1501),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(5644),
                             Name = "Outpatient Department",
                             Status = 1
                         },
                         new
                         {
                             Id = new Guid("7cd042ca-c443-4067-91c1-6d1df0fad8d5"),
-                            CreatedAt = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2766),
+                            CreatedAt = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6859),
                             DepartmentInitials = "INP",
                             DepartmentNumber = "INP-1122334466",
                             Description = "This section of the hospital caters for patients that are required to be admitted for at least one night",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2767),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6861),
                             Name = "Inpatient Department",
                             Status = 1
                         },
                         new
                         {
                             Id = new Guid("368faff2-f91f-4de3-a9b9-ac6e659ced57"),
-                            CreatedAt = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2777),
+                            CreatedAt = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6871),
                             DepartmentInitials = "PHY",
                             DepartmentNumber = "PHY-1122334477",
                             Description = "This section of the hospital contains all the doctors in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2778),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6871),
                             Name = "Physicians Department",
                             Status = 1
                         },
                         new
                         {
                             Id = new Guid("a0a2e6c6-3fee-46dc-a87e-dcb215029e93"),
-                            CreatedAt = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2780),
+                            CreatedAt = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6874),
                             DepartmentInitials = "NUR",
                             DepartmentNumber = "NUR-1122334488",
                             Description = "This section of the hospital contains all the nurses in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2781),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6875),
                             Name = "Nursing Department",
                             Status = 1
                         },
                         new
                         {
                             Id = new Guid("12757ffa-ab81-4a23-b3a1-4f3fc169ec53"),
-                            CreatedAt = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2783),
+                            CreatedAt = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6877),
                             DepartmentInitials = "PHM",
                             DepartmentNumber = "PHM-1122334499",
                             Description = "This section of the hospital contains all the pharmacists in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2784),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6878),
                             Name = "Pharmarcy Department",
                             Status = 1
                         },
                         new
                         {
                             Id = new Guid("501c0200-3c6d-48c7-8b6e-964a87f0c290"),
-                            CreatedAt = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2786),
+                            CreatedAt = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6880),
                             DepartmentInitials = "MLA",
                             DepartmentNumber = "MLA-1122335511",
                             Description = "This section of the hospital contains all the laboratory scientists and radiologists in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2787),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6881),
                             Name = "Medical Laboratory Department",
                             Status = 1
                         },
                         new
                         {
                             Id = new Guid("295d3a0c-992c-4dfb-bcc2-e26fb6f9b4b8"),
-                            CreatedAt = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2789),
+                            CreatedAt = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6883),
                             DepartmentInitials = "ACC",
                             DepartmentNumber = "ACC-1122335522",
                             Description = "This section of the hospital contains all the accountants in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2790),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6883),
                             Name = "Accounts Department",
                             Status = 1
                         },
                         new
                         {
                             Id = new Guid("91c4ebd1-33ae-4ef2-aeee-1d12e01d3dfb"),
-                            CreatedAt = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2792),
+                            CreatedAt = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6885),
                             DepartmentInitials = "RCD",
                             DepartmentNumber = "RCD-1122335533",
                             Description = "This section of the hospital is tasked with managing all the records in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2792),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6886),
                             Name = "Records Department",
                             Status = 1
                         },
                         new
                         {
                             Id = new Guid("55ccc95d-caac-44fe-b3ee-8830184ee9b5"),
-                            CreatedAt = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2794),
+                            CreatedAt = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6888),
                             DepartmentInitials = "JNT",
                             DepartmentNumber = "JNT-1122335544",
                             Description = "This section of the hospital contains all the maintenance and cleaning staff in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2795),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6889),
                             Name = "Janitorial Department",
                             Status = 1
                         },
                         new
                         {
                             Id = new Guid("2b212064-c708-44fd-a49a-6d138cdded37"),
-                            CreatedAt = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2797),
+                            CreatedAt = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6891),
                             DepartmentInitials = "SEC",
                             DepartmentNumber = "SEC-1122335566",
                             Description = "This section of the hospital contains all the security officers in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 112, DateTimeKind.Utc).AddTicks(2798),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 595, DateTimeKind.Utc).AddTicks(6891),
                             Name = "Security Department",
                             Status = 1
                         });
@@ -371,28 +371,28 @@ namespace HospitalManagement.Data.Migrations
                         new
                         {
                             Id = "27fb1887-cf6f-45d8-83d1-c501d6054fd3",
-                            ConcurrencyStamp = "a67900d4-2ca0-4222-8f54-f8b6e15c9619",
+                            ConcurrencyStamp = "7a2ef114-ec3e-4491-94e4-14020a57cdd3",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         },
                         new
                         {
                             Id = "5af1f3a1-f7f9-4ad0-b757-cda796199def",
-                            ConcurrencyStamp = "72fde2d5-1033-4dff-8b63-43f52c5981d7",
+                            ConcurrencyStamp = "6a934e68-742b-42b8-ab71-d847a960ab75",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "67228962-a44c-49a6-b89b-395dd92cf75a",
-                            ConcurrencyStamp = "6a900ce4-259b-4658-a5db-ba92cf1c8167",
+                            ConcurrencyStamp = "3bf2cf5e-bc62-4a5f-a4a9-873ceb42eb92",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
                             Id = "a1ff4611-dc37-4a8e-af8e-73e764fc8676",
-                            ConcurrencyStamp = "3e45c231-b950-4ea5-9ee6-89c99fef5956",
+                            ConcurrencyStamp = "3bcc2a4c-7572-42c1-b3aa-6297572b8870",
                             Name = "Patient",
                             NormalizedName = "PATIENT"
                         });
@@ -522,11 +522,11 @@ namespace HospitalManagement.Data.Migrations
                 {
                     b.HasBaseType("HospitalManagement.Domain.Models.AppUser");
 
-                    b.Property<string>("BloodGroup")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("BloodGroup")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Genotype")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Genotype")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Patient");
                 });
@@ -551,7 +551,7 @@ namespace HospitalManagement.Data.Migrations
                             Id = "300ddf19-95e6-4744-83e6-2aa5e1d444c0",
                             AccessFailedCount = 0,
                             Address = "Hospital Management Location",
-                            ConcurrencyStamp = "25a646b2-2da9-41e3-bfbf-dfc8822d4bfc",
+                            ConcurrencyStamp = "9fb57541-76ac-4a1f-a758-9acb409709e2",
                             Email = "admin@hospitalManagement.com",
                             EmailConfirmed = true,
                             FirstName = "Hospital",
@@ -560,15 +560,15 @@ namespace HospitalManagement.Data.Migrations
                             LastName = "Admin",
                             LockoutEnabled = false,
                             MiddleName = "Default",
-                            ModifiedOn = new DateTime(2022, 6, 14, 16, 42, 2, 113, DateTimeKind.Utc).AddTicks(6975),
+                            ModifiedOn = new DateTime(2022, 6, 16, 12, 59, 59, 597, DateTimeKind.Utc).AddTicks(3313),
                             NormalizedEmail = "ADMIN@HOSPITALMANAGEMENT.COM",
                             NormalizedUserName = "ADMIN@HOSPITALMANAGEMENT.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFjzV9HGJ/L4PKKWFqJA1ZClkPGx2OiFMClxJe62Mk/kAazF0hqwH1IhcvuXQPbZSA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMjImwvbuNNTT6hvmjAsjWMdvTLnnRYwiH0fi0LkWbvle57C5EG/uMAJ4M03Qg18pQ==",
                             PhoneNumber = "+2348064879196",
                             PhoneNumberConfirmed = true,
-                            RegisterationDate = new DateTime(2022, 6, 14, 16, 42, 2, 113, DateTimeKind.Utc).AddTicks(6970),
-                            SecurityStamp = "01542451-d0f5-4afa-aeb1-5e8b18019643",
-                            Sex = "Male",
+                            RegisterationDate = new DateTime(2022, 6, 16, 12, 59, 59, 597, DateTimeKind.Utc).AddTicks(3309),
+                            SecurityStamp = "56affcef-44ea-472e-ab64-1ee478e0497f",
+                            Sex = 0,
                             TwoFactorEnabled = false,
                             UserName = "admin@hospitalManagement.com",
                             DepartmentId = new Guid("2b212064-c708-44fd-a49a-6d138cdded37"),

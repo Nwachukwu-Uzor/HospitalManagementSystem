@@ -15,11 +15,8 @@ namespace HospitalManagement.Services.Profiles
 
                 CreateMap<Doctor, DoctorRequestDto>()
                           .ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Department.Name))
-                          .ForMember(dest => dest.DepartmentNumber, opt => opt.MapFrom(src => src.Department.DepartmentNumber));
-
-                CreateMap<DoctorCreationDto, AppUser>()
-                    .ForMember(dest => dest.EmailConfirmed, option => option.MapFrom(src => true))
-                    .ForMember(dest => dest.UserName, option => option.MapFrom(src => src.Email));
+                          .ForMember(dest => dest.DepartmentNumber, opt => opt.MapFrom(src => src.Department.DepartmentNumber))
+                          .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex.ToString()));
         }
     }
 }

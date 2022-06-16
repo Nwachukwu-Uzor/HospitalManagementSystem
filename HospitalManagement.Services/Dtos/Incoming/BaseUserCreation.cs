@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HospitalManagement.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -31,8 +32,8 @@ namespace HospitalManagement.Services.Dtos.Incoming
         public string PhoneNumber { get; set; }
 
         [Required]
-        [MinLength(4)]
-        public string Sex { get; set; }
+        [Range(0, 2, ErrorMessage = "Please pass in a valid sex")]
+        public Gender Sex { get; set; }
 
         [Required]
         [MinLength(10)]

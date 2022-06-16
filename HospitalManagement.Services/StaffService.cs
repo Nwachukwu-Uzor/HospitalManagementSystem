@@ -27,5 +27,24 @@ namespace HospitalManagement.Services
 
             return _mapper.Map<IEnumerable<StaffRequestDto>>(staff);
         }
+
+        public async Task<StaffRequestDto> GetStaffByIdentityNumber(string identityNumber)
+        {
+            var staff = await _unitOfWork.Staff.GetUserByIdentityNumber(identityNumber);
+
+            if (staff == null)
+            {
+                throw new ArgumentException("No user matches the identity number provided");
+            }
+
+            return _mapper.Map<StaffRequestDto>(staff);
+        }
+
+        public async Task<IEnumerable<StaffRequestDto>> SearchForStaffByNameOrEmail(string name = "", string email = "", int page = 1, int size = 25)
+        {
+            var staff = await _unitOfWork.Staff.SearchForUsers(name, email, page, 25);
+
+            return _mapper.Map<IEnumerable<StaffRequestDto>>(staff);
+        }
     }
 }

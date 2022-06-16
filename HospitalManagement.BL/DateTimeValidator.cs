@@ -13,8 +13,8 @@ namespace HospitalManagement.BL
             var alertDate = date.AddDays(-1);
             var year = alertDate.Year;
             var month = alertDate.Month;
-            var day = alertDate.Day - 1;
-            var dateTime = new DateTime(year, month, day, 5, 0, 0);
+            var day = alertDate.Day;
+            var dateTime = new DateTime(year, month, day, 18, 0, 0);
             return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
         }
 

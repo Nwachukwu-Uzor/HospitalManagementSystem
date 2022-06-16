@@ -35,5 +35,19 @@ namespace HospitalManagement.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchForStaff(string name = "", string email = "", int page = 1, int size = 25)
+        {
+            try
+            {
+                var staff = await _staffService.SearchForStaffByNameOrEmail(name, email, page, size);
+
+                return Ok(GenerateApiResponse<IEnumerable<StaffRequestDto>>.GenerateSuccessResponse(staff));
+            } catch(Exception ex)
+            {
+                return BadRequest(GenerateApiResponse<IEnumerable<StaffRequestDto>>.GenerateFailureResponse(ex.Message));
+            }
+        }
     }
 }

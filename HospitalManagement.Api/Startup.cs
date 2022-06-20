@@ -14,14 +14,18 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Reflection;
+using Hangfire.PostgreSql;
+using System;
 
 namespace HospitalManagement.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -48,12 +52,26 @@ namespace HospitalManagement.Api
             // services.ConfigureIdentity();
 
             services.AddDataLayerServices();
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("SqlServer"));
-            });
+            
 
-            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("SqlServer")));
+            if (_env.IsDevelopment())
+            {
+                services.AddDbContext<AppDbContext>(options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("SqlServer"));
+                });
+
+                services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("SqlServer")));
+            } else
+            {
+                services.AddDbContext<AppDbContext>(options =>
+                {
+                    options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_URI"));
+                });
+                services.AddHangfire(x => x.UsePostgreSqlStorage(Environment.GetEnvironmentVariable("DATABASE_URI")));
+            }
+
+            
 
             services.AddHangfireServer();
 
@@ -108,7 +126,7 @@ namespace HospitalManagement.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext _context)
         {
             if (env.IsDevelopment())
             {
@@ -131,7 +149,7 @@ namespace HospitalManagement.Api
             {
                 endpoints.MapControllers();
             });
-
+            _context.Database.EnsureCreated();
             app.UseHangfireDashboard();
         }
     }

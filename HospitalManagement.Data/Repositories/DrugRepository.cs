@@ -33,12 +33,12 @@ namespace HospitalManagement.Data.Repositories
 
         public async Task<Drug> GetDrugByIdentityNumber(string identityNumber)
         {
-            return await _dbSet.Where(drug => drug.IdentificationNumber == identityNumber && drug.Status == 1).FirstOrDefaultAsync();
+            return await _dbSet.Where(drug => drug.IdentificationNumber == identityNumber).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Drug>> SearchForDrugByNameOrDescription(string name, string description, int page, int size)
         {
-            var drugs = _dbSet.Where(drg => drg.Status == 1).AsQueryable();
+            var drugs = _dbSet.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(name))
             {

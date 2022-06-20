@@ -27,20 +27,20 @@ namespace HospitalManagement.Data.Repositories
 
         public virtual async Task<bool> DeleteAsync(Guid id)
         {
-            var entity = await _dbSet.Where(ent => ent.Id == id && ent.Status == 1).FirstOrDefaultAsync();
+            var entity = await _dbSet.Where(ent => ent.Id == id).FirstOrDefaultAsync();
             if (entity == null)
             {
                 return false;
             }
 
-            entity.Status = 0;
+            _dbSet.Remove(entity);
 
             return await _context.SaveChangesAsync() > 0;
         }
 
         public virtual async Task<IEnumerable<T>> GetAllPaginatedAsync(int pageNumber, int pageSize, List<string> options = null)
         {
-            var users = _dbSet.Where(entity => entity.Status == 1);
+            var users = _dbSet.AsQueryable();
                
             if (options != null)
             {
@@ -50,16 +50,17 @@ namespace HospitalManagement.Data.Repositories
                 }
             }
                 
-            return await users.OrderBy(pat => pat.CreatedAt).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return await users.OrderBy(pat => pat.CreatedAt).Skip((pageNumber - 1) * pageSize).Take(pageSize).AsNoTracking().ToListAsync();
         }
 
         public virtual async Task<T> GetByIdAsync(Guid id)
         {
-            return await _dbSet.Where(entity => entity.Id == id && entity.Status == 1).FirstOrDefaultAsync();
+            return await _dbSet.Where(entity => entity.Id == id).AsNoTracking().FirstOrDefaultAsync();
         }
 
         public async Task<T> UpdateAsync(T entity)
         {
+            _dbSet.Attach(entity);
             _dbSet.Update(entity);
             return (await _context.SaveChangesAsync()) > 0 ? entity : null;
         }

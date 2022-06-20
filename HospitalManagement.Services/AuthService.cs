@@ -18,11 +18,13 @@ namespace HospitalManagement.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly string _jwtKey;
 
         public AuthService(UserManager<AppUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
         }
 
         public async Task<string> CreateToken(AppUser user)
@@ -56,7 +58,9 @@ namespace HospitalManagement.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -74,7 +78,7 @@ namespace HospitalManagement.Services
             var jwtSettings = _configuration.GetSection("JwtConfig");
             // in production
             // var Key = Environment.GetEnvironmentVariable("JWT_KEY")
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("SecretKey").Value));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtKey));
 
             return new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         }

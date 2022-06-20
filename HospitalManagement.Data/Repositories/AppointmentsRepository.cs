@@ -70,8 +70,6 @@ namespace HospitalManagement.Data.Repositories
         {
             var appointments = await _dbSet.Where(app =>
                 app.Doctor.IdentificationNumber == doctorIdentityNumber
-                &&
-                app.Status == 1
             )
             .AsNoTracking()
             .OrderByDescending(app => app.CreatedAt)
@@ -94,8 +92,6 @@ namespace HospitalManagement.Data.Repositories
         {
             var appointments = await _dbSet.Where(app =>
                 app.Patient.IdentificationNumber == patientIdentityNumber
-                &&
-                app.Status == 1
             )
             .AsNoTracking()
             .Include(app => app.Doctor)
@@ -117,8 +113,6 @@ namespace HospitalManagement.Data.Repositories
         {
             var appointments = await _dbSet.Where(app =>
                 app.Doctor.IdentificationNumber == doctorIdentityNumber
-                &&
-                app.Status == 1
                 &&
                 app.AppointmentDate.DayOfYear == date.DayOfYear
                 &&

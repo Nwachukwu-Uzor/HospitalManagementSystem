@@ -16,6 +16,8 @@ namespace HospitalManagement.Data
             services.AddScoped<IDrugRepository, DrugRepository>();
             services.AddScoped<IStaffRepository<Staff>, StaffRepository>();
             services.AddScoped<IDepartmentsRepository, DepartmentsRepository>();
+            services.AddScoped<IRefreshTokensRepository, RefreshTokensRepository>();
+            services.AddScoped<IDrugOrderRepository, DrugOrderRepository>();
         }
     }
 }

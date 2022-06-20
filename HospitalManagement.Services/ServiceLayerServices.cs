@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Reflection;
 using System.Text;
 
@@ -20,6 +21,7 @@ namespace HospitalManagement.Services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IStaffService, StaffService>();
+            services.AddScoped<IDrugOrderService, DrugOrderService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
@@ -46,7 +48,7 @@ namespace HospitalManagement.Services
                     ValidateIssuerSigningKey = true,
                     ValidateAudience = false,
                     ValidIssuer = jwtSettings.GetSection("Issuer").Value,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("SecretKey").Value))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET_KEY")))
                 };
             });
         }

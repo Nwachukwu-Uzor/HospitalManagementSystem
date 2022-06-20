@@ -11,10 +11,12 @@ namespace HospitalManagement.BL
     public class EmailService : IEmailService
     {
         private readonly SendGridApi _sendGridApi;
+        private readonly string _key;
 
         public EmailService(IOptions<SendGridApi> options)
         {
             _sendGridApi = options.Value ?? throw new ArgumentException(nameof(SendGridApi));
+            _key = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
         }
 
         public Email CreateAccountRegistrationMail(
@@ -57,7 +59,7 @@ namespace HospitalManagement.BL
         {
             try
             {
-                var client = new SendGridClient(_sendGridApi.ApiKey);
+                var client = new SendGridClient(_key);
                 var from = new EmailAddress(_sendGridApi.FromEmail, _sendGridApi.FromName);
                 var to = new EmailAddress(email.ToEmail, email.ToName);
                 var msg = MailHelper.CreateSingleEmail(from, to, email.Subject, "To Replace this later", email.Body);

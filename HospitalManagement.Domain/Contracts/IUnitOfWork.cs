@@ -1,9 +1,4 @@
 ﻿using HospitalManagement.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HospitalManagement.Domain.Contracts
 {
@@ -17,5 +12,7 @@ namespace HospitalManagement.Domain.Contracts
         public IDrugRepository Drugs { get; }
         public IDepartmentsRepository Departments { get; }
         public IStaffRepository<Staff> Staff { get; }
+        public IDrugOrderRepository DrugOrders { get; }
+        public IRefreshTokensRepository RefreshTokens { get; }
     }
 }

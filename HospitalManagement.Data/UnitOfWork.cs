@@ -17,10 +17,15 @@ namespace HospitalManagement.Data
 
         public IStaffRepository<Staff> Staff { get; }
 
+        public IDrugOrderRepository DrugOrders { get; }
+
+        public IRefreshTokensRepository RefreshTokens { get; }
+
         public UnitOfWork(
             IDoctorsRepository doctors, IPatientsRepository patients, 
             IAppointmentsRepository appointments, IDrugRepository drugs,
-            IDepartmentsRepository departments, IStaffRepository<Staff> staff
+            IDepartmentsRepository departments, IStaffRepository<Staff> staff,
+            IDrugOrderRepository drugOrders, IRefreshTokensRepository refreshTokens
         )
         {
             Doctors = doctors;
@@ -29,6 +34,8 @@ namespace HospitalManagement.Data
             Drugs = drugs;
             Departments = departments;
             Staff = staff;
+            DrugOrders = drugOrders;
+            RefreshTokens = refreshTokens;
         }
     }
 }

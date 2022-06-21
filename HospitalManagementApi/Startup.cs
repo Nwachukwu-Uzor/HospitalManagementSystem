@@ -61,14 +61,14 @@ namespace HospitalManagementApi
                     options.UseSqlServer(Configuration.GetConnectionString("SqlServer"));
                 });
 
-                services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("SqlServer")));
+                // services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("SqlServer")));
             } else
             {
                 services.AddDbContext<AppDbContext>(options =>
                 {
                     options.UseNpgsql(Configuration.GetConnectionString("Postgres"));
                 });
-                services.AddHangfire(x => x.UsePostgreSqlStorage(Configuration.GetConnectionString("Postgres")));
+                // services.AddHangfire(x => x.UsePostgreSqlStorage(Configuration.GetConnectionString("Postgres")));
             }
 
             
@@ -146,12 +146,13 @@ namespace HospitalManagementApi
 
             app.UseAuthorization();
 
+            //app.UseHangfireDashboard();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
             _context.Database.EnsureCreated();
-            app.UseHangfireDashboard();
         }
     }
 }

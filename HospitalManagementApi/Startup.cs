@@ -66,9 +66,9 @@ namespace HospitalManagementApi
             {
                 services.AddDbContext<AppDbContext>(options =>
                 {
-                    options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_URI"));
+                    options.UseNpgsql(Configuration.GetConnectionString("Postgres"));
                 });
-                services.AddHangfire(x => x.UsePostgreSqlStorage(Environment.GetEnvironmentVariable("DATABASE_URI")));
+                services.AddHangfire(x => x.UsePostgreSqlStorage(Configuration.GetConnectionString("Postgres")));
             }
 
             

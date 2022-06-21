@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Hangfire" Version="1.7.29" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.17" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="SendGrid" Version="9.27.0" />
+    <PackageReference Include="Twilio" Version="5.75.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HospitalManagementBL\HospitalManagementBL.csproj" />
+    <ProjectReference Include="..\HospitalManagementData\HospitalManagementData.csproj" />
+    <ProjectReference Include="..\HospitalManagementDomain\HospitalManagementDomain.csproj" />
+    <ProjectReference Include="..\HospitalManagementBL\HospitalManagementBL.csproj" />
+    <ProjectReference Include="..\HospitalManagementData\HospitalManagementData.csproj" />
+    <ProjectReference Include="..\HospitalManagementDomain\HospitalManagementDomain.csproj" />
+  </ItemGroup>
+
+</Project>

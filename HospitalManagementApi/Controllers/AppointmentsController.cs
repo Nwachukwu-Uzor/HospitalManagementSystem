@@ -1,13 +1,13 @@
-﻿using HospitalManagement.Api.Response;
-using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Dtos.Incoming.Appointment;
-using HospitalManagement.Services.Dtos.Outgoing.Appointment;
+﻿using HospitalManagementApi.Response;
+using HospitalManagementServices.Contracts;
+using HospitalManagementServices.Dtos.Incoming.Appointment;
+using HospitalManagementServices.Dtos.Outgoing.Appointment;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace HospitalManagement.Api.Controllers
+namespace HospitalManagementApi.Controllers
 {
     public class AppointmentsController : BaseController
     {

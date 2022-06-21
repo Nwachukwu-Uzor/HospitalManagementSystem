@@ -1,13 +1,13 @@
-﻿using HospitalManagement.Api.Response;
-using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Dtos.Incoming.Doctors;
-using HospitalManagement.Services.Dtos.Outgoing.Doctors;
+﻿using HospitalManagementApi.Response;
+using HospitalManagementServices.Contracts;
+using HospitalManagementServices.Dtos.Incoming.Doctors;
+using HospitalManagementServices.Dtos.Outgoing.Doctors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace HospitalManagement.Api.Controllers
+namespace HospitalManagementApi.Controllers
 {
     public class DoctorsController : BaseController
     {

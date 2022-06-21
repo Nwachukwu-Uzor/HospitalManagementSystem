@@ -1,4 +1,4 @@
-﻿namespace HospitalManagement.Api.Response
+﻿namespace HospitalManagementApi.Response
 {
     public class GenerateApiResponse<T>
     {

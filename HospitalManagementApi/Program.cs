@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HospitalManagement.Api
+namespace HospitalManagementApi
 {
     public class Program
     {

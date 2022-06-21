@@ -1,6 +1,6 @@
-﻿using HospitalManagement.Api.Response;
-using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Dtos.Outgoing.Staff;
+﻿using HospitalManagementApi.Response;
+using HospitalManagementServices.Contracts;
+using HospitalManagementServices.Dtos.Outgoing.Staff;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HospitalManagement.Api.Controllers
+namespace HospitalManagementApi.Controllers
 {
     [Authorize(Roles = "SuperAdmin, Admin")]
     public class StaffController : BaseController

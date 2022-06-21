@@ -1,7 +1,7 @@
-﻿using HospitalManagement.Api.Filters;
+﻿using HospitalManagementApi.Filters;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HospitalManagement.Api.Controllers
+namespace HospitalManagementApi.Controllers
 {
     [Route("api/[controller]")]
     [ValidateModel]

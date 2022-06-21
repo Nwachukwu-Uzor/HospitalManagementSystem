@@ -21,8 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HospitalManagement.Data\HospitalManagement.Data.csproj" />
-    <ProjectReference Include="..\HospitalManagement.Services\HospitalManagement.Services.csproj" />
+    <ProjectReference Include="..\HospitalManagementData\HospitalManagementData.csproj" />
+    <ProjectReference Include="..\HospitalManagementServices\HospitalManagementServices.csproj" />
+    <ProjectReference Include="..\HospitalManagementBL\HospitalManagementBL.csproj" />
+    <ProjectReference Include="..\HospitalManagementData\HospitalManagementData.csproj" />
+    <ProjectReference Include="..\HospitalManagementDomain\HospitalManagementDomain.csproj" />
+    <ProjectReference Include="..\HospitalManagementServices\HospitalManagementServices.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,9 @@
 using Hangfire;
-using HospitalManagement.BL;
-using HospitalManagement.BL.Models;
-using HospitalManagement.Data;
-using HospitalManagement.Domain.Models;
-using HospitalManagement.Services;
+using HospitalManagementBL;
+using HospitalManagementBL.Models;
+using HospitalManagementData;
+using HospitalManagementDomain.Models;
+using HospitalManagementServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +17,7 @@ using System.Reflection;
 using Hangfire.PostgreSql;
 using System;
 
-namespace HospitalManagement.Api
+namespace HospitalManagementApi
 {
     public class Startup
     {
@@ -134,7 +134,7 @@ namespace HospitalManagement.Api
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HospitalManagement.Api v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HospitalManagementApi v1"));
 
             app.UseHttpsRedirection();
 

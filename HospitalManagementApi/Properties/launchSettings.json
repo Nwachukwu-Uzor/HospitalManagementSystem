@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "HospitalManagement.Api": {
+    "HospitalManagementApi": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

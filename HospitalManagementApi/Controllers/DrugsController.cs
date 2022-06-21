@@ -1,7 +1,7 @@
-﻿using HospitalManagement.Api.Response;
-using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Dtos.Incoming.Drugs;
-using HospitalManagement.Services.Dtos.Outgoing.Drugs;
+﻿using HospitalManagementApi.Response;
+using HospitalManagementServices.Contracts;
+using HospitalManagementServices.Dtos.Incoming.Drugs;
+using HospitalManagementServices.Dtos.Outgoing.Drugs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace HospitalManagement.Api.Controllers
+namespace HospitalManagementApi.Controllers
 {
     [Authorize(Roles = "SuperAdmin, Admin")]
     public class DrugsController : BaseController

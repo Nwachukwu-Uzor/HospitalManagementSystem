@@ -1,7 +1,7 @@
-﻿using HospitalManagement.Api.Response;
-using HospitalManagement.Services.Contracts;
-using HospitalManagement.Services.Dtos.Incoming.DrugOrder;
-using HospitalManagement.Services.Dtos.Outgoing.DrugOrder;
+﻿using HospitalManagementApi.Response;
+using HospitalManagementServices.Contracts;
+using HospitalManagementServices.Dtos.Incoming.DrugOrder;
+using HospitalManagementServices.Dtos.Outgoing.DrugOrder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HospitalManagement.Api.Controllers
+namespace HospitalManagementApi.Controllers
 {
     public class DrugOrderController : BaseController
     {

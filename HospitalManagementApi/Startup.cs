@@ -137,7 +137,7 @@ namespace HospitalManagementApi
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HospitalManagementApi v1"));
-
+            app.UseHangfireDashboard();
             app.UseHttpsRedirection();
 
             app.UseCors("AllowAll");
@@ -150,8 +150,6 @@ namespace HospitalManagementApi
 
 
             _context.Database.EnsureCreated();
-
-            app.UseHangfireDashboard();
 
             app.UseEndpoints(endpoints =>
             {

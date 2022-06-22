@@ -123,5 +123,9 @@ namespace HospitalManagementApi.Controllers
                 return BadRequest(GenerateApiResponse<StaffAdminDto>.GenerateFailureResponse(ex.Message));
             }
         }
+
+        [Authorize(Roles = "SuperAdmin, Admin")]
+        [HttpDelete("delete-account")]
+        public async Task<IActionResult> DeleteUser()
     }
 }

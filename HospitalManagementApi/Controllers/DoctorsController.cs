@@ -2,6 +2,7 @@
 using HospitalManagementServices.Contracts;
 using HospitalManagementServices.Dtos.Incoming.Doctors;
 using HospitalManagementServices.Dtos.Outgoing.Doctors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagementApi.Controllers
 {
+    [Authorize]
     public class DoctorsController : BaseController
     {
         private readonly IDoctorsService _doctorsService;

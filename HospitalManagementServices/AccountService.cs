@@ -4,6 +4,7 @@ using HospitalManagementBL.Models;
 using HospitalManagementDomain.Contracts;
 using HospitalManagementDomain.Models;
 using HospitalManagementServices.Contracts;
+using HospitalManagementServices.Dtos.Incoming.Auth;
 using HospitalManagementServices.Dtos.Incoming.Doctors;
 using HospitalManagementServices.Dtos.Incoming.Patients;
 using HospitalManagementServices.Dtos.Incoming.Staff;
@@ -50,12 +51,17 @@ namespace HospitalManagementServices
             _smsService = smsService;
         }
 
-        public async Task<bool> DeleteAccount(string email)
+        public async Task<bool> DeleteAccount(UserDeleteDto user)
         {
-            var user = _userManager.FindByEmailAsync(email);
+            var _user = await _userManager.FindByEmailAsync(user.Email);
 
+            if (_user == null)
+            {
+                throw new ArgumentException("No user exists with that email");
+            }
 
-            throw new NotImplementedException();
+            var deleted = await _userManager.DeleteAsync(_user);
+            return deleted.Succeeded;
         }
 
         public Task<bool> LoginAccount(string email, string password)

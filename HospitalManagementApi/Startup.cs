@@ -52,7 +52,7 @@ namespace HospitalManagementApi
             // services.ConfigureIdentity();
 
             services.AddDataLayerServices();
-            
+
 
             if (_env.IsDevelopment())
             {
@@ -62,18 +62,16 @@ namespace HospitalManagementApi
                 });
 
                 // services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("SqlServer")));
-            } else
+    
+            }
+            else
             {
                 services.AddDbContext<AppDbContext>(options =>
                 {
                     options.UseNpgsql(Configuration.GetConnectionString("Postgres"));
                 });
-                // services.AddHangfire(x => x.UsePostgreSqlStorage(Configuration.GetConnectionString("Postgres")));
+                //services.AddHangfire(x => x.UsePostgreSqlStorage(Configuration.GetConnectionString("Postgres")));
             }
-
-            
-
-            services.AddHangfireServer();
 
             // calling in SendGrid Configurations
             services.Configure<SendGridApi>(Configuration.GetSection("SendGrid"));
@@ -146,6 +144,7 @@ namespace HospitalManagementApi
 
             app.UseAuthorization();
 
+            //app.UseHangfireServer();
             //app.UseHangfireDashboard();
 
             app.UseEndpoints(endpoints =>

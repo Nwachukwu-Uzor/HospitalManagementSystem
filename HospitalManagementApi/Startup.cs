@@ -129,7 +129,6 @@ namespace HospitalManagementApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext _context)
         {
             _context.Database.EnsureCreated();
-            _context.Database.Migrate();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

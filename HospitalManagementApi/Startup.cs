@@ -128,7 +128,7 @@ namespace HospitalManagementApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext _context)
         {
-            _context.Database.EnsureCreated();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -146,7 +146,10 @@ namespace HospitalManagementApi
             app.UseAuthentication();
 
             app.UseAuthorization();
-            
+
+
+            _context.Database.EnsureCreated();
+
             // app.UseHangfireDashboard();
 
             app.UseEndpoints(endpoints =>

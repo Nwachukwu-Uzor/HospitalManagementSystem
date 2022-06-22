@@ -3,106 +3,106 @@ using System;
 using HospitalManagementData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HospitalManagementData.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220622111510_initial")]
+    [Migration("20220622123322_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .UseIdentityByDefaultColumns()
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("HospitalManagementDomain.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("IdentificationNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("RegisterationDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Sex")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -111,8 +111,7 @@ namespace HospitalManagementData.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
 
@@ -123,34 +122,34 @@ namespace HospitalManagementData.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("AppointmentDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("DoctorId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("DoctorId1")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("PatientId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("PatientId1")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ReferenceNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -165,25 +164,25 @@ namespace HospitalManagementData.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DepartmentInitials")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("DepartmentNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -193,101 +192,101 @@ namespace HospitalManagementData.Migrations
                         new
                         {
                             Id = new Guid("7da11ee0-2519-493f-816a-ba6f46aacb74"),
-                            CreatedAt = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(994),
+                            CreatedAt = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(5025),
                             DepartmentInitials = "OTP",
                             DepartmentNumber = "OTP-1122334455",
                             Description = "This section of the hospital caters for patients that require medical attention but are notrequired to be admitted are treated",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(1005),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(5035),
                             Name = "Outpatient Department"
                         },
                         new
                         {
                             Id = new Guid("7cd042ca-c443-4067-91c1-6d1df0fad8d5"),
-                            CreatedAt = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2385),
+                            CreatedAt = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6401),
                             DepartmentInitials = "INP",
                             DepartmentNumber = "INP-1122334466",
                             Description = "This section of the hospital caters for patients that are required to be admitted for at least one night",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2387),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6403),
                             Name = "Inpatient Department"
                         },
                         new
                         {
                             Id = new Guid("368faff2-f91f-4de3-a9b9-ac6e659ced57"),
-                            CreatedAt = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2398),
+                            CreatedAt = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6414),
                             DepartmentInitials = "PHY",
                             DepartmentNumber = "PHY-1122334477",
                             Description = "This section of the hospital contains all the doctors in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2399),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6415),
                             Name = "Physicians Department"
                         },
                         new
                         {
                             Id = new Guid("a0a2e6c6-3fee-46dc-a87e-dcb215029e93"),
-                            CreatedAt = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2402),
+                            CreatedAt = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6418),
                             DepartmentInitials = "NUR",
                             DepartmentNumber = "NUR-1122334488",
                             Description = "This section of the hospital contains all the nurses in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2403),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6419),
                             Name = "Nursing Department"
                         },
                         new
                         {
                             Id = new Guid("12757ffa-ab81-4a23-b3a1-4f3fc169ec53"),
-                            CreatedAt = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2405),
+                            CreatedAt = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6421),
                             DepartmentInitials = "PHM",
                             DepartmentNumber = "PHM-1122334499",
                             Description = "This section of the hospital contains all the pharmacists in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2406),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6422),
                             Name = "Pharmarcy Department"
                         },
                         new
                         {
                             Id = new Guid("501c0200-3c6d-48c7-8b6e-964a87f0c290"),
-                            CreatedAt = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2408),
+                            CreatedAt = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6424),
                             DepartmentInitials = "MLA",
                             DepartmentNumber = "MLA-1122335511",
                             Description = "This section of the hospital contains all the laboratory scientists and radiologists in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2409),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6425),
                             Name = "Medical Laboratory Department"
                         },
                         new
                         {
                             Id = new Guid("295d3a0c-992c-4dfb-bcc2-e26fb6f9b4b8"),
-                            CreatedAt = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2411),
+                            CreatedAt = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6427),
                             DepartmentInitials = "ACC",
                             DepartmentNumber = "ACC-1122335522",
                             Description = "This section of the hospital contains all the accountants in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2412),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6427),
                             Name = "Accounts Department"
                         },
                         new
                         {
                             Id = new Guid("91c4ebd1-33ae-4ef2-aeee-1d12e01d3dfb"),
-                            CreatedAt = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2414),
+                            CreatedAt = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6429),
                             DepartmentInitials = "RCD",
                             DepartmentNumber = "RCD-1122335533",
                             Description = "This section of the hospital is tasked with managing all the records in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2414),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6430),
                             Name = "Records Department"
                         },
                         new
                         {
                             Id = new Guid("55ccc95d-caac-44fe-b3ee-8830184ee9b5"),
-                            CreatedAt = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2416),
+                            CreatedAt = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6432),
                             DepartmentInitials = "JNT",
                             DepartmentNumber = "JNT-1122335544",
                             Description = "This section of the hospital contains all the maintenance and cleaning staff in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2417),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6433),
                             Name = "Janitorial Department"
                         },
                         new
                         {
                             Id = new Guid("2b212064-c708-44fd-a49a-6d138cdded37"),
-                            CreatedAt = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2419),
+                            CreatedAt = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6435),
                             DepartmentInitials = "SEC",
                             DepartmentNumber = "SEC-1122335566",
                             Description = "This section of the hospital contains all the security officers in the hospital",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 66, DateTimeKind.Utc).AddTicks(2420),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 598, DateTimeKind.Utc).AddTicks(6435),
                             Name = "Security Department"
                         });
                 });
@@ -296,28 +295,28 @@ namespace HospitalManagementData.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("IdentificationNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -328,25 +327,25 @@ namespace HospitalManagementData.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("DrugId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("StaffId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -361,22 +360,22 @@ namespace HospitalManagementData.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -386,26 +385,25 @@ namespace HospitalManagementData.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
 
@@ -413,28 +411,28 @@ namespace HospitalManagementData.Migrations
                         new
                         {
                             Id = "27fb1887-cf6f-45d8-83d1-c501d6054fd3",
-                            ConcurrencyStamp = "ce623ba8-bfdf-451f-b0e5-55deb470668e",
+                            ConcurrencyStamp = "ac5d2cbe-2791-439c-ba31-a3b0d8010f40",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         },
                         new
                         {
                             Id = "5af1f3a1-f7f9-4ad0-b757-cda796199def",
-                            ConcurrencyStamp = "63889e94-37a3-40bc-8cd8-7d3d6d4fae83",
+                            ConcurrencyStamp = "fe68d865-34be-47e0-b07b-9a052073caca",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "67228962-a44c-49a6-b89b-395dd92cf75a",
-                            ConcurrencyStamp = "b2ba4aff-06a5-49c8-bd60-a89aee1fdffe",
+                            ConcurrencyStamp = "ca504b07-00ae-40cd-9a13-c3c65c401b48",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
                             Id = "a1ff4611-dc37-4a8e-af8e-73e764fc8676",
-                            ConcurrencyStamp = "81c9049d-27d2-41f5-b32c-119a4d3cf87d",
+                            ConcurrencyStamp = "b254276b-10be-4bcb-beec-93a75d18f27b",
                             Name = "Patient",
                             NormalizedName = "PATIENT"
                         });
@@ -444,18 +442,18 @@ namespace HospitalManagementData.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -468,18 +466,18 @@ namespace HospitalManagementData.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -492,18 +490,18 @@ namespace HospitalManagementData.Migrations
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderKey")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -515,10 +513,10 @@ namespace HospitalManagementData.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -542,18 +540,18 @@ namespace HospitalManagementData.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -565,10 +563,10 @@ namespace HospitalManagementData.Migrations
                     b.HasBaseType("HospitalManagementDomain.Models.AppUser");
 
                     b.Property<int>("BloodGroup")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Genotype")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasDiscriminator().HasValue("Patient");
                 });
@@ -578,10 +576,10 @@ namespace HospitalManagementData.Migrations
                     b.HasBaseType("HospitalManagementDomain.Models.AppUser");
 
                     b.Property<Guid>("DepartmentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("DepartmentNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasIndex("DepartmentId");
 
@@ -593,7 +591,7 @@ namespace HospitalManagementData.Migrations
                             Id = "300ddf19-95e6-4744-83e6-2aa5e1d444c0",
                             AccessFailedCount = 0,
                             Address = "Hospital Management Location",
-                            ConcurrencyStamp = "f1bec7ac-a2d0-452e-a7e5-de4f6a44d695",
+                            ConcurrencyStamp = "4598c2f5-24f2-4842-88f1-0c48e0aeb7d5",
                             Email = "admin@hospitalManagement.com",
                             EmailConfirmed = true,
                             FirstName = "Hospital",
@@ -602,14 +600,14 @@ namespace HospitalManagementData.Migrations
                             LastName = "Admin",
                             LockoutEnabled = false,
                             MiddleName = "Default",
-                            ModifiedOn = new DateTime(2022, 6, 22, 11, 15, 10, 67, DateTimeKind.Utc).AddTicks(7562),
+                            ModifiedOn = new DateTime(2022, 6, 22, 12, 33, 21, 600, DateTimeKind.Utc).AddTicks(1238),
                             NormalizedEmail = "ADMIN@HOSPITALMANAGEMENT.COM",
                             NormalizedUserName = "ADMIN@HOSPITALMANAGEMENT.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIOzLdlY5g0imjLAArVGeIefimCTThfPJNTrG4Sn0QuA0134FNtMFcVtSUZfeRF5eg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEK0Fn1QYqX+UyiCEbFRZOUjXIjeBrTV4oRNovC3M/wxH/SoTZvLfft7Vjh4QbcDkJg==",
                             PhoneNumber = "+2348064879196",
                             PhoneNumberConfirmed = true,
-                            RegisterationDate = new DateTime(2022, 6, 22, 11, 15, 10, 67, DateTimeKind.Utc).AddTicks(7554),
-                            SecurityStamp = "d533d334-73d7-4c76-8b0e-b7fd563bf8b3",
+                            RegisterationDate = new DateTime(2022, 6, 22, 12, 33, 21, 600, DateTimeKind.Utc).AddTicks(1229),
+                            SecurityStamp = "dbba1baa-1055-433d-b4ce-c505700fd5a9",
                             Sex = 0,
                             TwoFactorEnabled = false,
                             UserName = "admin@hospitalManagement.com",

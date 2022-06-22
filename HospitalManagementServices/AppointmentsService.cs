@@ -67,7 +67,7 @@ namespace HospitalManagementServices
 
                 var smsToSend = new SMS() { Body = $"Dear {patient.FirstName}, you have an appointment on {appointmentDate}" };
 
-                // var jobId = BackgroundJob.Schedule(() => _emailService.SendMail(alertEmail), alertTime);
+                var jobId = BackgroundJob.Schedule(() => _emailService.SendMail(alertEmail), alertTime);
 
                 return _mapper.Map<AppointmentRequestDto>(appointmentAdded);
             } catch(Exception ex)

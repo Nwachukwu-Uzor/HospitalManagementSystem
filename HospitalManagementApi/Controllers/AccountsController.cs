@@ -126,6 +126,27 @@ namespace HospitalManagementApi.Controllers
 
         [Authorize(Roles = "SuperAdmin, Admin")]
         [HttpDelete("delete-account")]
-        public async Task<IActionResult> DeleteUser()
+        public async Task<IActionResult> DeleteUser(UserDeleteDto deleteDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var isDeleted = await _accountService.DeleteAccount(deleteDto);
+
+                if (!isDeleted)
+                {
+                    return BadRequest(GenerateApiResponse<UserDeleteDto>.GenerateFailureResponse("Unsuccessful delete attempt"));
+                }
+
+                return Ok(GenerateApiResponse<UserDeleteDto>.GenerateEmptySuccessMessage("User deleted successfully"));
+            } catch(Exception ex)
+            {
+                return BadRequest(GenerateApiResponse<UserDeleteDto>.GenerateFailureResponse(ex.Message));
+            } 
+        }
     }
 }

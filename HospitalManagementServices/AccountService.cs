@@ -64,11 +64,6 @@ namespace HospitalManagementServices
             return deleted.Succeeded;
         }
 
-        public Task<bool> LoginAccount(string email, string password)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> MakeStaffAdmin(StaffAdminDto staffDto)
         {
             var staff = await _unitOfWork.Staff.GetUserByIdentityNumber(staffDto.IdentificationNumber);

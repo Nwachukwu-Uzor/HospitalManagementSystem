@@ -2,7 +2,6 @@
 using HospitalManagementServices.Contracts;
 using HospitalManagementServices.Dtos.Incoming.Departments;
 using HospitalManagementServices.Dtos.Outgoing.Departments;
-using HospitalManagementServices.Dtos.Outgoing.Doctors;
 using HospitalManagementServices.Dtos.Outgoing.Staff;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace HospitalManagementApi.Controllers
 {
-    [Authorize]
     public class DepartmentsController : BaseController
     {
         private readonly IDepartmentsService _departmentService;
